@@ -347,7 +347,7 @@ export default function Home() {
           <FadeIn className="text-center mb-16">
             <h2 className="font-[family-name:var(--font-cormorant)] text-3xl tracking-[0.2em] uppercase mb-2">{d.nav.shops}</h2>
           </FadeIn>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
             {d.allShops.map((shop, i) => (
               <FadeIn key={i} delay={i * 0.08} className="bg-white p-6 hover:shadow-lg transition-shadow duration-500 border border-transparent hover:border-[#8b7355]/20">
                 <h3 className="font-[family-name:var(--font-cormorant)] text-lg tracking-[0.15em] mb-1">{shop.en}</h3>
@@ -356,6 +356,51 @@ export default function Home() {
               </FadeIn>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ─── CONTACT ─── */}
+      <section id="contact" className="py-28 bg-white border-t border-[#f5f5f0]">
+        <div className="max-w-4xl mx-auto px-6 md:px-10 flex flex-col md:flex-row gap-16">
+          <FadeIn className="md:w-1/2">
+            <h2 className="font-[family-name:var(--font-cormorant)] text-3xl md:text-5xl tracking-[0.15em] mb-4">CONTACT</h2>
+            <p className="text-[10px] tracking-[0.1em] text-[#8b7355] mb-8">{d.contactSub || "お問い合わせ"}</p>
+            <p className="text-sm tracking-wide text-[#888] leading-relaxed mb-8">
+              {lang === "ja" 
+                ? "商品に関するご質問やご意見など、お気軽にお問い合わせください。" 
+                : "Please feel free to contact us with any questions or feedback regarding our products."}
+            </p>
+            <div className="text-xs tracking-wider text-[#555] space-y-2">
+              <p>E-mail: shop@chez-shibata.com</p>
+              <p>TEL: +81 (0) 572-24-3030</p>
+            </div>
+          </FadeIn>
+          
+          <FadeIn delay={0.2} className="md:w-1/2">
+            <form className="space-y-6 flex flex-col" onSubmit={e => e.preventDefault()}>
+              <input 
+                type="text" 
+                placeholder={lang === "ja" ? "お名前" : "Name"} 
+                className="w-full border-b border-[#ddd] pb-3 bg-transparent outline-none text-sm placeholder:text-[#aaa] focus:border-[#8b7355] transition-colors"
+              />
+              <input 
+                type="email" 
+                placeholder={lang === "ja" ? "メールアドレス" : "Email"} 
+                className="w-full border-b border-[#ddd] pb-3 bg-transparent outline-none text-sm placeholder:text-[#aaa] focus:border-[#8b7355] transition-colors"
+              />
+              <textarea 
+                placeholder={lang === "ja" ? "メッセージ" : "Message"} 
+                rows={4}
+                className="w-full border-b border-[#ddd] pb-3 bg-transparent outline-none text-sm placeholder:text-[#aaa] focus:border-[#8b7355] transition-colors resize-none"
+              ></textarea>
+              <button 
+                type="submit" 
+                className="self-start mt-4 px-10 py-3 bg-[#1a1a1a] text-white text-[10px] tracking-[0.2em] uppercase hover:bg-[#8b7355] transition-colors duration-300"
+              >
+                {lang === "ja" ? "送信する" : "Send Message"}
+              </button>
+            </form>
+          </FadeIn>
         </div>
       </section>
 

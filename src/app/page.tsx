@@ -364,7 +364,7 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-6 md:px-10 flex flex-col md:flex-row gap-16">
           <FadeIn className="md:w-1/2">
             <h2 className="font-[family-name:var(--font-cormorant)] text-3xl md:text-5xl tracking-[0.15em] mb-4">CONTACT</h2>
-            <p className="text-[10px] tracking-[0.1em] text-[#8b7355] mb-8">{d.contactSub || "お問い合わせ"}</p>
+            <p className="text-[10px] tracking-[0.1em] text-[#8b7355] mb-8">{lang === "ja" ? "お問い合わせ" : "Contact Us"}</p>
             <p className="text-sm tracking-wide text-[#888] leading-relaxed mb-8">
               {lang === "ja" 
                 ? "商品に関するご質問やご意見など、お気軽にお問い合わせください。" 

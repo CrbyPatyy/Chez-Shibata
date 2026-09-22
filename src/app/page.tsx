@@ -1,354 +1,408 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-const t = {
+/* ───────────────────────────────────────────
+   TRANSLATIONS — every detail from chez-shibata.com
+   ─────────────────────────────────────────── */
+const dict = {
   ja: {
-    nav: { products: "商品一覧", chef: "シェフ", tajimi: "多治見本店", shops: "全店舗", contact: "お問い合わせ" },
-    heroTitle: "CHEZ SHIBATA",
-    heroSub: "Woven with carefully selected ingredients",
-    intro: "シェ・シバタは、フランス菓子の伝統的な技法と日本の繊細な感性を融合させたパティスリーです。一切の妥協を許さない美学に基づき、職人技が光る極上のスイーツをお届けします。",
-    freshCakes: "Fresh Cakes",
-    freshCakesDesc: "シェフのインスピレーションから生まれた、季節ごとに華やかに変化する生菓子です。",
-    butterCakes: "Baked Goods",
-    butterCakesDesc: "厳選された素材とレシピで焼き上げた、伝統的なお菓子から生まれたオリジナル焼き菓子をご紹介します。",
-    chefName: "Takeshi Shibata",
-    chefRole: "Founder / Executive Chef",
-    chefBio: "「子供の頃から母と一緒に料理やお菓子を作り、プロのシェフになることを夢見ていました。」\n1995年にシェ・シバタを開店。現在は毎月半分を国内外での菓子製作やスタッフの指導に費やしています。ビジネスコンサルタント、デモンストレーション、テレビ出演など、国内外で幅広く活躍。日本の侍精神とグローバルな感性を融合させたパティシエです。",
-    tajimiTitle: "TAJIMI",
-    tajimiLead: "フランス菓子の文化と製法をベースに、伝統的な菓子から革新的なスイーツまで、シバタオリジナルスイーツをお客様にご提供しています。",
-    tajimiDesc: "多治見市はシェフ柴田の出身地であり、陶器で有名な街です。\nここはシェ・シバタブランドの発祥の地で、1995年に開店しました。\n現在、世界的な活動が認められ、柴田シェフは多治見市の観光大使に任命されています。",
-    labels: { tel: "TEL", email: "MAIL", hours: "HOURS", holiday: "HOLIDAY", access: "ACCESS" },
-    locations: [
-      { 
-        id: "tajimi", name: "TAJIMI", tel: "0572-24-3030", email: "shop@chez-shibata.com", hours: "10:00 - 19:00", holiday: "火曜日", access: "岐阜県多治見市太平町5-10-3\nJR中央線 多治見駅北口より徒歩20分", img: "https://en.chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/images/shop/tajimi_hero.jpg", span: "col-span-1 md:col-span-2 row-span-2"
-      },
-      { 
-        id: "nagoya", name: "NAGOYA", tel: "052-762-0007", hours: "10:00 - 19:00", access: "名古屋市千種区山門町2-54", img: "https://en.chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/hero-2-pc.jpg", span: "col-span-1 md:col-span-1 row-span-1"
-      },
-      { 
-        id: "sakae", name: "MITSUKOSHI", tel: "052-252-1270", hours: "10:00 - 20:00", access: "名古屋市中区栄3-5-1 B1F", img: "https://en.chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/butter-cakes-img-pc.jpg", span: "col-span-1 md:col-span-1 row-span-1"
-      },
-      { 
-        id: "overseas", name: "OVERSEAS", access: "アジア各地に展開中", img: "https://en.chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/hero-3-pc.jpg", span: "col-span-1 md:col-span-2 row-span-1"
-      }
+    nav: { home: "ホーム", products: "商品紹介", chef: "シェフ紹介", shops: "店舗案内", online: "オンラインショップ", company: "会社概要", contact: "お問い合わせ", recruit: "採用情報" },
+    heroSub: "PÂTISSERIE · CHOCOLATIER · SALON DE THÉ",
+    intro: "多治見、名古屋をはじめ、海外に店舗を展開しているシェ・シバタ。\n世界のグルメ達から日本の技術や味覚が求められている今、\nフランスのお菓子の伝統や技術をベースに独自のスイーツを発信し続けます。",
+    freshTitle: "FRESH CAKES",
+    freshDesc: "季節ごとに変わるフレッシュなケーキ、シェフのインスピレーションで刺激的に変化していきます。",
+    butterTitle: "BUTTER CAKES",
+    butterDesc: "こだわりの素材、製法で焼き上げた伝統菓子からオリジナルのお菓子の紹介。",
+    lineup: "LINEUP",
+    chefRole: "Founder Executive Chef",
+    chefName: "柴田 武",
+    chefNameEn: "TAKESHI SHIBATA",
+    chefBio: "幼き頃、母親と一緒に料理やお菓子を作り、職人の夢を持った。\n1995年にシェ・シバタを開業。\n現在、月の半分を日本と海外でお菓子創りやスタッフ指導、また国内、海外での企業コンサルからデモンストレーション、TV番組の出演など幅広く活躍。\n日本のサムライ魂を持ち、グローバルな感覚を持ち合わせたパティシエ。",
+    tajimiPageTitle: "TAJIMI BRANCH",
+    tajimiPageSub: "シェ・シバタ 多治見",
+    tajimiLead: "フランスのお菓子文化、製法をベースに伝統的なお菓子から革新的なお菓子までシバタオリジナルのスイーツをお客様にお届けします。",
+    tajimiDescEn: "Chef SHIBATA was born in a famous ceramic city, Tajimi.\nChez Shibata was opened in 1995 in Tajimi where my birthplace is.\nChef Shibata is now a tourism ambassador of TAJIMI city, recognized worldwide.",
+    tajimiDescJa: "シェフ柴田の生まれた街、陶磁器の有名な街、多治見市。\n1995年にオープンしたシェ・シバタ発祥の地。\n今では海外などグローバルな活躍が認められ多治見市の観光大使に就任。",
+    infoTitle: "INFORMATION",
+    infoSub: "店舗情報",
+    accessTitle: "ACCESS MAP",
+    accessSub: "アクセスマップ",
+    labels: { tel: "TEL", email: "E-mail", hours: "営業時間", holiday: "定休日", access: "アクセス", parking: "駐車場" },
+    tajimi: { tel: "0572-24-3030", email: "shop@chez-shibata.com", hours: "10時〜19時", holiday: "火曜日", address: "〒507-0041 岐阜県多治見市太平町5-10-3", directions: "中央本線多治見駅北口より徒歩20分\n多治見ICより車で5分", parking: "7台" },
+    allShops: [
+      { en: "TAJIMI", ja: "シェ・シバタ多治見店", info: "〒507-0041 岐阜県多治見市太平町5-10-3\nTEL. 0572-24-3030\n10時〜19時" },
+      { en: "NAGOYA", ja: "シェ・シバタ名古屋店", info: "〒464-0064 愛知県名古屋市千種区山門町2-54\nTEL. 052-762-0007\n10時〜19時" },
+      { en: "MITSUKOSHI", ja: "シェ・シバタ名古屋栄三越店", info: "〒460-8669 愛知県名古屋市中区栄3-5-1\n名古屋栄三越 B1F\nTEL. 052-252-1270\n10時〜20時" },
+      { en: "SEIBU IKEBUKURO", ja: "シェ・シバタ西武池袋店", info: "〒171-8569 東京都豊島区南池袋1-28-1\n西武池袋本店 B1F\nTEL. 03-6907-1333\n10時〜20時" },
+      { en: "OVERSEAS", ja: "シェ・シバタ海外事業", info: "" }
     ],
-    contactTitle: "Get in touch",
-    formName: "Name",
-    formEmail: "Email",
-    formMessage: "Message",
-    formSubmit: "Send Message",
+    onlineShop: "ONLINE SHOP",
+    onlineShopSub: "オンラインショップ",
+    footerNav: {
+      products: "商品紹介",
+      freshCakes: "生ケーキ",
+      butterCakes: "焼菓子",
+      specialty: "スペシャリテ",
+      chocolat: "ショコラ",
+      wholeCakes: "ホールケーキ",
+      chef: "シェフ紹介",
+      shops: "店舗案内",
+      company: "会社概要",
+      contact: "お問い合わせ",
+      recruit: "採用情報",
+    },
   },
   en: {
-    nav: { products: "Products", chef: "Chef", tajimi: "Tajimi Main", shops: "All Shops", contact: "Contact" },
-    heroTitle: "CHEZ SHIBATA",
-    heroSub: "Woven with carefully selected ingredients",
-    intro: "Chez Shibata is a pâtisserie that fuses the traditional techniques of French confectionery with delicate Japanese sensibilities. We deliver exquisite sweets crafted with uncompromising aesthetics.",
-    freshCakes: "Fresh Cakes",
-    freshCakesDesc: "Fresh cakes that excitedly change from season to season based on the chef's inspiration.",
-    butterCakes: "Butter Cakes",
-    butterCakesDesc: "Introducing our original confectioneries derived from traditional sweets baked using specially-selected ingredients and recipes.",
+    nav: { home: "Home", products: "Products", chef: "Chef", shops: "Shops", online: "Online Shop", company: "Company", contact: "Contact", recruit: "Recruit" },
+    heroSub: "PÂTISSERIE · CHOCOLATIER · SALON DE THÉ",
+    intro: "Chez Shibata has opened more than 10 shops throughout Asia, including in Tajimi and Nagoya.\nJapanese craftsmanship and sense of taste are now sought after by gourmet lovers around the world.\nWe continue to provide original sweets based on the traditions and techniques of French confectioneries.",
+    freshTitle: "FRESH CAKES",
+    freshDesc: "Fresh cakes that excitedly change from season to season based on the chef's inspiration.",
+    butterTitle: "BUTTER CAKES",
+    butterDesc: "Introducing our original confectioneries derived from traditional sweets baked using specially-selected ingredients and recipes.",
+    lineup: "LINEUP",
+    chefRole: "Founder Executive Chef",
     chefName: "Takeshi Shibata",
-    chefRole: "Founder / Executive Chef",
-    chefBio: "“I used to cook dishes and bake sweets with my mother, and I dreamed of becoming a professional chef ever since I was young.”\nOpened Chez Shibata in 1995. Currently, he spends half of each month creating confectioneries and training staff members both in Japan and overseas. He is a pâtissier who combines the Japanese samurai spirit with global sensibilities.",
-    tajimiTitle: "TAJIMI",
+    chefNameEn: "TAKESHI SHIBATA",
+    chefBio: ""I used to cook dishes and bake sweets with my mother, and I dreamed of becoming a professional chef ever since I was young."\nOpened Chez Shibata in 1995. Currently, he spends half of each month creating confectioneries and training staff members both in Japan and overseas. He is also broadly active both domestically and internationally as a business consultant as well as giving demonstrations and making television appearances.\nHe is a pâtissier who combines the Japanese samurai spirit with global sensibilities.",
+    tajimiPageTitle: "TAJIMI BRANCH",
+    tajimiPageSub: "Chez Shibata Tajimi",
     tajimiLead: "We provide customers with a range of Shibata original sweets based on French confectionery culture and production methods, from traditional confectioneries to innovative sweets.",
-    tajimiDesc: "Tajimi City is the birthplace of Chef Shibata and famous for pottery.\nThis is the origin of the Chez Shibata brand, opened in 1995.\nNow, in recognition of his global activities, Chef Shibata has been appointed as Tajimi City’s tourism ambassador.",
-    labels: { tel: "TEL", email: "MAIL", hours: "HOURS", holiday: "HOLIDAY", access: "ACCESS" },
-    locations: [
-      { 
-        id: "tajimi", name: "TAJIMI", tel: "0572-24-3030", email: "shop@chez-shibata.com", hours: "10:00 - 19:00", holiday: "Tuesday", access: "5-10-3 Taihei-cho, Tajimi city\n20 min from Tajimi Station", img: "https://en.chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/images/shop/tajimi_hero.jpg", span: "col-span-1 md:col-span-2 row-span-2"
-      },
-      { 
-        id: "nagoya", name: "NAGOYA", tel: "052-762-0007", hours: "10:00 - 19:00", access: "2-54 Sanmon-cho, Chikusa-ku", img: "https://en.chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/hero-2-pc.jpg", span: "col-span-1 md:col-span-1 row-span-1"
-      },
-      { 
-        id: "sakae", name: "MITSUKOSHI", tel: "052-252-1270", hours: "10:00 - 20:00", access: "B1F 3-5-1 Sakae, Naka-ku", img: "https://en.chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/butter-cakes-img-pc.jpg", span: "col-span-1 md:col-span-1 row-span-1"
-      },
-      { 
-        id: "overseas", name: "OVERSEAS", access: "Expanding throughout Asia", img: "https://en.chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/hero-3-pc.jpg", span: "col-span-1 md:col-span-2 row-span-1"
-      }
+    tajimiDescEn: "Chef SHIBATA was born in a famous ceramic city, Tajimi.\nChez Shibata was opened in 1995 in Tajimi where my birthplace is.\nChef Shibata is now a tourism ambassador of TAJIMI city, recognized worldwide.",
+    tajimiDescJa: "Tajimi City is the birthplace of Chef Shibata and famous for pottery.\nThis is the origin of the Chez Shibata brand, opened in 1995.\nNow, in recognition of his global activities, Chef Shibata has been appointed as Tajimi City's tourism ambassador.",
+    infoTitle: "INFORMATION",
+    infoSub: "Shop Details",
+    accessTitle: "ACCESS MAP",
+    accessSub: "Directions",
+    labels: { tel: "TEL", email: "E-mail", hours: "Hours", holiday: "Holiday", access: "Access", parking: "Parking" },
+    tajimi: { tel: "0572-24-3030", email: "shop@chez-shibata.com", hours: "10:00 - 19:00", holiday: "Tuesday", address: "5-10-3 Taihei-cho, Tajimi City, Gifu", directions: "20 min on foot from the North Exit at Tajimi Station on the Chuo Line\n5 min by car from Tajimi IC", parking: "7 spaces" },
+    allShops: [
+      { en: "TAJIMI", ja: "Tajimi Main Shop", info: "5-10-3 Taihei-cho, Tajimi City\nTEL. 0572-24-3030\n10:00 - 19:00" },
+      { en: "NAGOYA", ja: "Nagoya Shop", info: "2-54 Sanmon-cho, Chikusa-ku, Nagoya\nTEL. 052-762-0007\n10:00 - 19:00" },
+      { en: "MITSUKOSHI", ja: "Sakae Mitsukoshi Shop", info: "B1F 3-5-1 Sakae, Naka-ku, Nagoya\nNagoya Sakae Mitsukoshi\nTEL. 052-252-1270\n10:00 - 20:00" },
+      { en: "SEIBU IKEBUKURO", ja: "Seibu Ikebukuro Shop", info: "B1F 1-28-1 Minami-Ikebukuro\nToshima-ku, Tokyo\nTEL. 03-6907-1333\n10:00 - 20:00" },
+      { en: "OVERSEAS", ja: "Overseas Operations", info: "" }
     ],
-    contactTitle: "Get in touch",
-    formName: "Name",
-    formEmail: "Email",
-    formMessage: "Message",
-    formSubmit: "Send Message",
+    onlineShop: "ONLINE SHOP",
+    onlineShopSub: "Shop Online",
+    footerNav: {
+      products: "Products",
+      freshCakes: "Fresh Cakes",
+      butterCakes: "Butter Cakes",
+      specialty: "Specialty",
+      chocolat: "Chocolate",
+      wholeCakes: "Whole Cakes",
+      chef: "About the Chef",
+      shops: "Shops",
+      company: "Company Profile",
+      contact: "Contact Us",
+      recruit: "Recruit",
+    },
   }
 };
 
-// Reveal text word by word
-const RevealText = ({ text, className }: { text: string, className?: string }) => {
-  const words = text.split(" ");
-  return (
-    <motion.div className={`flex flex-wrap ${className}`}>
-      {words.map((word, i) => (
-        <div key={i} className="overflow-hidden mr-[0.25em] mb-2">
-          <motion.span
-            initial={{ y: "100%" }}
-            whileInView={{ y: 0 }}
-            viewport={{ once: true, margin: "-10%" }}
-            transition={{ duration: 0.8, delay: i * 0.05, ease: [0.215, 0.61, 0.355, 1] }}
-            className="inline-block"
-          >
-            {word}
-          </motion.span>
-        </div>
-      ))}
-    </motion.div>
-  );
-};
+/* ─── Cake data with JP names + descriptions ─── */
+const cakes = [
+  { img: "https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/fresh-cakes-thumb-6.jpg", name: "PÉCHE D'AMOUR", ja: "ペッシュダムール", desc: "２種類の桃を使用し、レアチーズ、アーモンド生地などでリッチに仕上げた季節限定のお菓子。" },
+  { img: "https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/fresh-cakes-thumb-7.jpg", name: "TARTE AUX FIGUES", ja: "タルト オ フィグ", desc: "自慢のタルト生地に愛知県産イチジクをのせた人気のタルト。" },
+  { img: "https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/fresh-cakes-thumb-8.jpg", name: "MANGOSTIC", ja: "マンゴスティック", desc: "マンゴーのコンポートとマンゴープリン、ライムのクリーム、数種のナッツのプラリネ。" },
+  { img: "https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/fresh-cakes-thumb-9.jpg", name: "L'ULTIME CHOCOLAT", ja: "ルティム ショコラ", desc: "コートジボワール産のカカオからできたナッティーなチョコレートムースにバニラのクレームブリュレと自家製のプラリネを忍ばせました。" },
+  { img: "https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/fresh-cakes-thumb-1.jpg", name: "GOURMANDISE", ja: "グルマンディーズ", desc: "国産いちごとキルシュのカスタードクリーム、北海道産生クリームをパイ生地とシュー生地でサンドにしました。" },
+  { img: "https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/fresh-cakes-thumb-5.jpg", name: "AGRUME YUZU.", ja: "アギューム ユズ", desc: "柚子とミルクチョコレートを使用し甘味と酸味が融合したお菓子。" },
+];
+
+const FadeIn = ({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) => (
+  <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-8%" }} transition={{ duration: 0.7, delay, ease: [0.25, 0.1, 0.25, 1] }} className={className}>
+    {children}
+  </motion.div>
+);
 
 export default function Home() {
   const [lang, setLang] = useState<"ja" | "en">("ja");
-  const currentT = t[lang];
-  
-  // Parallax setup
-  const { scrollYProgress } = useScroll();
-  const yHero = useTransform(scrollYProgress, [0, 1], [0, 500]);
-  const opacityHero = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
+  const d = dict[lang];
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Hero slideshow
+  useEffect(() => {
+    const timer = setInterval(() => setActiveSlide(s => (s + 1) % 3), 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const heroImages = [
+    "https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/hero-1.jpg",
+    "https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/hero-2-pc.jpg",
+    "https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/hero-3-pc.jpg",
+  ];
 
   return (
-    <div className="bg-[#f2f0ec] text-[#1a1a1a] min-h-screen selection:bg-[#1a1a1a] selection:text-[#f2f0ec] font-serif">
-      
-      {/* Modern Navigation */}
-      <motion.nav 
-        initial={{ y: -100 }} animate={{ y: 0 }} transition={{ duration: 1, ease: [0.215, 0.61, 0.355, 1] }}
-        className="fixed top-0 w-full z-50 px-6 py-8 flex justify-between items-center mix-blend-difference text-white pointer-events-none"
-      >
-        <div className="font-[family-name:var(--font-cormorant)] text-2xl tracking-[0.2em] pointer-events-auto">
-          C.S
-        </div>
-        <div className="flex gap-8 items-center pointer-events-auto">
-          <div className="hidden lg:flex gap-8 text-xs tracking-[0.2em] uppercase">
-            <a href="#products" className="hover:opacity-50 transition-opacity">Products</a>
-            <a href="#chef" className="hover:opacity-50 transition-opacity">Chef</a>
-            <a href="#tajimi" className="hover:opacity-50 transition-opacity">Tajimi</a>
-            <a href="#contact" className="hover:opacity-50 transition-opacity">Contact</a>
-          </div>
-          <button 
-            onClick={() => setLang(lang === "ja" ? "en" : "ja")}
-            className="text-xs tracking-[0.2em] border-b border-white/30 pb-1 hover:border-white transition-colors"
-          >
-            {lang === "ja" ? "EN" : "JA"}
-          </button>
-        </div>
-      </motion.nav>
+    <div className="min-h-screen bg-[#FAFAF7] text-[#1a1a1a] font-[family-name:var(--font-noto-serif-jp)] selection:bg-[#8b7355]/30">
 
-      {/* Hero Section with Sticky Parallax */}
-      <section className="relative h-screen overflow-hidden">
-        <motion.div style={{ y: yHero, opacity: opacityHero }} className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-black/30 z-10"></div>
-          <img src="https://en.chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/hero-1.jpg" alt="Hero" className="w-full h-full object-cover object-[center_30%]" />
-        </motion.div>
-        
-        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none">
-          <div className="overflow-hidden">
-            <motion.h1 
-              initial={{ y: "100%" }} animate={{ y: 0 }} transition={{ duration: 1.2, delay: 0.2, ease: [0.215, 0.61, 0.355, 1] }}
-              className="text-6xl md:text-[9vw] font-light tracking-widest text-white uppercase font-[family-name:var(--font-cormorant)] text-center leading-none"
-            >
-              {currentT.heroTitle}
-            </motion.h1>
-          </div>
-          <motion.div 
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1, duration: 1 }}
-            className="mt-8 text-white/80 tracking-[0.3em] text-xs md:text-sm uppercase font-sans"
-          >
-            {currentT.heroSub}
-          </motion.div>
-        </div>
-      </section>
+      {/* ─── HEADER ─── */}
+      <header className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? "bg-white/95 backdrop-blur-lg shadow-[0_1px_0_rgba(0,0,0,0.06)]" : "bg-transparent"}`}>
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10 h-20 flex items-center justify-between">
+          <a href="#" className="flex flex-col leading-tight">
+            <span className={`font-[family-name:var(--font-cormorant)] text-lg tracking-[0.25em] uppercase transition-colors ${scrolled ? "text-[#1a1a1a]" : "text-white"}`}>Chez Shibata</span>
+            <span className={`text-[9px] tracking-[0.15em] transition-colors ${scrolled ? "text-[#999]" : "text-white/60"}`}>シェ・シバタ</span>
+          </a>
 
-      {/* Marquee Banner */}
-      <div className="bg-[#1a1a1a] text-[#f2f0ec] py-4 overflow-hidden border-y border-[#333]">
-        <motion.div 
-          animate={{ x: [0, -1000] }} transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
-          className="whitespace-nowrap font-[family-name:var(--font-cormorant)] text-2xl md:text-4xl tracking-widest uppercase flex gap-12"
-        >
-          <span>Artisanal Pâtisserie</span>
-          <span>•</span>
-          <span>Takeshi Shibata</span>
-          <span>•</span>
-          <span>Tajimi</span>
-          <span>•</span>
-          <span>Nagoya</span>
-          <span>•</span>
-          <span>Artisanal Pâtisserie</span>
-          <span>•</span>
-          <span>Takeshi Shibata</span>
-          <span>•</span>
-          <span>Tajimi</span>
-          <span>•</span>
-          <span>Nagoya</span>
-        </motion.div>
-      </div>
+          <div className="flex items-center gap-6">
+            <nav className="hidden xl:flex gap-7 text-[11px] tracking-[0.15em]">
+              {Object.entries(d.nav).slice(1, 6).map(([key, val]) => (
+                <a key={key} href={key === "online" ? "https://shop-shibata.com/" : `#${key}`} target={key === "online" ? "_blank" : undefined} className={`hover:text-[#8b7355] transition-colors ${scrolled ? "text-[#555]" : "text-white/90"}`}>{val}</a>
+              ))}
+            </nav>
 
-      {/* Intro Reveal */}
-      <section className="py-32 px-6 md:px-20 max-w-7xl mx-auto flex flex-col md:flex-row gap-20 items-center">
-        <div className="md:w-1/2">
-          <RevealText text={currentT.intro} className="text-2xl md:text-4xl leading-[1.6] tracking-wide text-[#1a1a1a]" />
-        </div>
-        <motion.div 
-          initial={{ clipPath: "inset(100% 0 0 0)" }}
-          whileInView={{ clipPath: "inset(0 0 0 0)" }}
-          viewport={{ once: true, margin: "-10%" }}
-          transition={{ duration: 1.5, ease: [0.215, 0.61, 0.355, 1] }}
-          className="md:w-1/2 aspect-[4/5] overflow-hidden"
-        >
-          <img src="https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/fresh-cakes-thumb-6.jpg" alt="Intro" className="w-full h-full object-cover scale-110 hover:scale-100 transition-transform duration-[2s] ease-out" />
-        </motion.div>
-      </section>
-
-      {/* Products - Alternating Layout */}
-      <section id="products" className="py-32 bg-[#e8e5de]">
-        <div className="max-w-7xl mx-auto px-6 md:px-20">
-          
-          <div className="grid md:grid-cols-12 gap-12 items-center mb-40">
-            <div className="md:col-span-5 md:col-start-1">
-              <p className="font-sans text-xs tracking-[0.2em] mb-4 text-[#8b795c]">01. COLLECTION</p>
-              <h2 className="font-[family-name:var(--font-cormorant)] text-5xl md:text-7xl mb-8">{currentT.freshCakes}</h2>
-              <p className="text-lg leading-relaxed text-gray-700 font-light max-w-md">{currentT.freshCakesDesc}</p>
+            {/* Language Pill */}
+            <div className={`relative flex rounded-full p-[3px] border transition-colors ${scrolled ? "border-[#ddd] bg-[#f5f5f3]" : "border-white/20 bg-white/10 backdrop-blur-md"}`}>
+              <div className={`absolute top-[3px] bottom-[3px] w-[calc(50%-3px)] rounded-full transition-all duration-300 ${lang === "en" ? "translate-x-full" : "translate-x-0"} ${scrolled ? "bg-white shadow-sm" : "bg-white/30"}`} />
+              <button onClick={() => setLang("ja")} className={`relative z-10 w-10 py-1 text-[9px] tracking-[0.15em] font-medium transition-colors ${lang === "ja" ? (scrolled ? "text-[#1a1a1a]" : "text-white") : (scrolled ? "text-[#aaa]" : "text-white/50")}`}>JA</button>
+              <button onClick={() => setLang("en")} className={`relative z-10 w-10 py-1 text-[9px] tracking-[0.15em] font-medium transition-colors ${lang === "en" ? (scrolled ? "text-[#1a1a1a]" : "text-white") : (scrolled ? "text-[#aaa]" : "text-white/50")}`}>EN</button>
             </div>
-            <motion.div 
-              initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 1 }}
-              className="md:col-span-6 md:col-start-7 aspect-square bg-gray-200 overflow-hidden"
-            >
-              <img src="https://en.chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/fresh-cakes-bg.png" alt="Fresh Cakes" className="w-full h-full object-cover hover:scale-105 transition-transform duration-[2s]" />
-            </motion.div>
-          </div>
 
-          <div className="grid md:grid-cols-12 gap-12 items-center">
-            <motion.div 
-              initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 1 }}
-              className="md:col-span-6 md:col-start-1 order-2 md:order-1 aspect-square bg-gray-200 overflow-hidden"
-            >
-              <img src="https://en.chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/butter-cakes-img-pc.jpg" alt="Butter Cakes" className="w-full h-full object-cover hover:scale-105 transition-transform duration-[2s]" />
-            </motion.div>
-            <div className="md:col-span-5 md:col-start-8 order-1 md:order-2">
-              <p className="font-sans text-xs tracking-[0.2em] mb-4 text-[#8b795c]">02. COLLECTION</p>
-              <h2 className="font-[family-name:var(--font-cormorant)] text-5xl md:text-7xl mb-8">{currentT.butterCakes}</h2>
-              <p className="text-lg leading-relaxed text-gray-700 font-light max-w-md">{currentT.butterCakesDesc}</p>
-            </div>
+            {/* Mobile hamburger */}
+            <button onClick={() => setMenuOpen(!menuOpen)} className="xl:hidden flex flex-col gap-[5px] p-2">
+              <span className={`block w-5 h-px transition-all ${scrolled ? "bg-[#1a1a1a]" : "bg-white"} ${menuOpen ? "rotate-45 translate-y-[3px]" : ""}`} />
+              <span className={`block w-5 h-px transition-all ${scrolled ? "bg-[#1a1a1a]" : "bg-white"} ${menuOpen ? "-rotate-45 -translate-y-[3px]" : ""}`} />
+            </button>
           </div>
-          
         </div>
-      </section>
+      </header>
 
-      {/* Chef - Sticky Split Screen */}
-      <section id="chef" className="relative hidden md:flex h-[150vh] bg-[#1a1a1a] text-[#f2f0ec]">
-        <div className="w-1/2 h-screen sticky top-0 flex flex-col justify-center px-20">
-          <p className="font-sans text-xs tracking-[0.3em] text-[#8b795c] mb-6 uppercase">{currentT.chefRole}</p>
-          <RevealText text={currentT.chefName} className="font-[family-name:var(--font-cormorant)] text-7xl mb-10 text-[#f2f0ec]" />
-          <p className="text-xl leading-[2.2] font-light max-w-xl whitespace-pre-line text-white/80">{currentT.chefBio}</p>
-          <img src="https://en.chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/sign.png" alt="Signature" className="h-12 mt-12 opacity-50 invert brightness-0" />
-        </div>
-        <div className="w-1/2 h-[150vh] flex items-center justify-center p-20">
-          <motion.div 
-            initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ margin: "-20%" }} transition={{ duration: 1 }}
-            className="w-full aspect-[3/4] overflow-hidden sticky top-32"
-          >
-            <img src="https://en.chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/chef-sp.jpg" alt="Chef" className="w-full h-full object-cover grayscale" />
+      {/* ─── MOBILE MENU ─── */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-40 bg-[#FAFAF7] flex flex-col items-center justify-center gap-8">
+            {Object.entries(d.nav).map(([key, val]) => (
+              <a key={key} href={`#${key}`} onClick={() => setMenuOpen(false)} className="text-xl tracking-widest hover:text-[#8b7355] transition-colors">{val}</a>
+            ))}
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ─── HERO SLIDESHOW ─── */}
+      <section className="relative h-screen min-h-[650px] overflow-hidden bg-black">
+        {heroImages.map((src, i) => (
+          <div key={i} className={`absolute inset-0 transition-opacity duration-[1.5s] ease-in-out ${i === activeSlide ? "opacity-100" : "opacity-0"}`}>
+            <img src={src} alt="Chez Shibata" className="w-full h-full object-cover" />
+          </div>
+        ))}
+        <div className="absolute inset-0 bg-black/30 z-10" />
+        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-white text-center">
+          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.3 }} className="font-[family-name:var(--font-cormorant)] text-5xl md:text-7xl lg:text-8xl font-light tracking-[0.2em] uppercase mb-6">
+            Chez Shibata
+          </motion.h1>
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1, duration: 1 }} className="text-[11px] md:text-xs tracking-[0.4em] text-white/70 font-[family-name:var(--font-cormorant)]">
+            {d.heroSub}
+          </motion.p>
         </div>
       </section>
 
-      {/* Chef - Mobile Fallback */}
-      <section className="md:hidden bg-[#1a1a1a] text-[#f2f0ec] py-24 px-6">
-        <p className="font-sans text-xs tracking-[0.3em] text-[#8b795c] mb-4 uppercase">{currentT.chefRole}</p>
-        <h2 className="font-[family-name:var(--font-cormorant)] text-5xl mb-8">{currentT.chefName}</h2>
-        <div className="w-full aspect-[3/4] overflow-hidden mb-12">
-          <img src="https://en.chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/chef-sp.jpg" alt="Chef" className="w-full h-full object-cover grayscale" />
-        </div>
-        <p className="text-lg leading-[2] font-light whitespace-pre-line text-white/80">{currentT.chefBio}</p>
+      {/* ─── INTRO ─── */}
+      <section className="py-28 px-6 max-w-3xl mx-auto text-center">
+        <FadeIn>
+          <div className="w-px h-14 bg-[#8b7355] mx-auto mb-10" />
+          <p className="text-base md:text-lg leading-[2.4] tracking-wide text-[#555] whitespace-pre-line">{d.intro}</p>
+        </FadeIn>
       </section>
 
-      {/* Tajimi Focus & Bento Grid Shops */}
-      <section id="tajimi" className="py-32 px-6 md:px-20 max-w-7xl mx-auto">
-        
-        <div className="mb-24 flex flex-col md:flex-row justify-between items-end gap-12">
-          <div className="md:w-1/2">
-            <h2 className="font-[family-name:var(--font-cormorant)] text-6xl md:text-8xl mb-6">{currentT.tajimiTitle}</h2>
-            <p className="text-xl md:text-2xl leading-[1.8] font-light">{currentT.tajimiLead}</p>
-          </div>
-          <div className="md:w-1/3">
-            <p className="text-sm leading-[2] text-gray-600 whitespace-pre-line">{currentT.tajimiDesc}</p>
-          </div>
-        </div>
+      {/* ─── FRESH CAKES ─── */}
+      <section id="products" className="py-24 bg-white">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10">
+          <FadeIn className="text-center mb-16">
+            <h2 className="font-[family-name:var(--font-cormorant)] text-4xl md:text-5xl tracking-[0.15em] mb-4">{d.freshTitle}</h2>
+            <p className="text-sm tracking-wide text-[#888] max-w-lg mx-auto leading-relaxed">{d.freshDesc}</p>
+          </FadeIn>
 
-        {/* Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 auto-rows-[300px] gap-4">
-          {currentT.locations.map((loc, i) => (
-            <motion.div 
-              key={i} 
-              initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: i * 0.1 }}
-              className={`relative overflow-hidden group cursor-pointer bg-[#e8e5de] ${loc.span}`}
-            >
-              <img src={loc.img} alt={loc.name} className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-[1.5s] ease-out" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-              
-              <div className="absolute inset-0 p-8 flex flex-col justify-end text-white">
-                <h3 className="font-[family-name:var(--font-cormorant)] text-3xl tracking-widest mb-2">{loc.name}</h3>
-                
-                <div className="h-0 overflow-hidden group-hover:h-auto group-hover:mt-4 transition-all duration-500 opacity-0 group-hover:opacity-100">
-                  <div className="space-y-2 text-xs tracking-widest font-sans font-light">
-                    {loc.tel && <p className="flex justify-between"><span className="text-white/50 w-20">{currentT.labels.tel}</span> <span>{loc.tel}</span></p>}
-                    {loc.hours && <p className="flex justify-between"><span className="text-white/50 w-20">{currentT.labels.hours}</span> <span>{loc.hours}</span></p>}
-                    {loc.holiday && <p className="flex justify-between"><span className="text-white/50 w-20">{currentT.labels.holiday}</span> <span>{loc.holiday}</span></p>}
-                    <div className="pt-2 mt-2 border-t border-white/20 whitespace-pre-line">{loc.access}</div>
-                  </div>
+          {/* Cake cards with names + descriptions */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-10">
+            {cakes.map((cake, i) => (
+              <FadeIn key={i} delay={i * 0.08} className="group">
+                <div className="aspect-square overflow-hidden bg-[#f5f5f0] mb-4">
+                  <img src={cake.img} alt={cake.ja} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                 </div>
-              </div>
-            </motion.div>
-          ))}
+                <p className="font-[family-name:var(--font-cormorant)] text-xs tracking-[0.1em] text-[#555] mb-1">{cake.name}</p>
+                <p className="text-[10px] tracking-wide text-[#8b7355] mb-2">{cake.ja}</p>
+                {lang === "ja" && <p className="text-[10px] leading-relaxed text-[#999] hidden md:block">{cake.desc}</p>}
+              </FadeIn>
+            ))}
+          </div>
+          <FadeIn className="text-center">
+            <a href="https://chez-shibata.com/cakes-cat/fresh-cakes/" className="inline-block text-xs tracking-[0.2em] border-b border-[#1a1a1a] pb-1 hover:text-[#8b7355] hover:border-[#8b7355] transition-colors">{d.lineup}</a>
+          </FadeIn>
         </div>
       </section>
 
-      {/* Elegant Contact */}
-      <section id="contact" className="py-40 bg-[#1a1a1a] text-[#f2f0ec] px-6">
-        <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-20">
+      {/* ─── BUTTER CAKES ─── */}
+      <section className="relative">
+        <FadeIn className="max-w-[1400px] mx-auto px-6 md:px-10 py-24 flex flex-col md:flex-row items-center gap-16">
           <div className="md:w-1/2">
-            <h2 className="font-[family-name:var(--font-cormorant)] text-5xl md:text-7xl mb-8 leading-tight">{currentT.contactTitle}</h2>
-            <p className="text-white/60 tracking-widest font-light mb-12 leading-relaxed">
-              For any inquiries, please fill out the form below. We will get back to you shortly.
-            </p>
-            <div className="space-y-4 font-sans text-sm tracking-widest font-light text-white/80">
-              <p>shop@chez-shibata.com</p>
-              <p>+81 (0) 572-24-3030</p>
+            <h2 className="font-[family-name:var(--font-cormorant)] text-4xl md:text-5xl tracking-[0.15em] mb-6">{d.butterTitle}</h2>
+            <p className="text-sm tracking-wide text-[#888] leading-relaxed mb-8 max-w-md">{d.butterDesc}</p>
+            <a href="https://chez-shibata.com/cakes-cat/butter-cakes/" className="inline-block text-xs tracking-[0.2em] border-b border-[#1a1a1a] pb-1 hover:text-[#8b7355] hover:border-[#8b7355] transition-colors">{d.lineup}</a>
+          </div>
+          <div className="md:w-1/2 overflow-hidden">
+            <img src="https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/butter-cakes-img-pc.jpg" alt="Butter Cakes" className="w-full object-cover hover:scale-105 transition-transform duration-[2s]" />
+          </div>
+        </FadeIn>
+      </section>
+
+      {/* ─── CHEF ─── */}
+      <section id="chef" className="py-28 bg-[#f5f3ee]">
+        <div className="max-w-6xl mx-auto px-6 md:px-10 flex flex-col md:flex-row gap-16 items-center">
+          <FadeIn className="md:w-2/5">
+            <img src="https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/chef-sp.jpg" alt={d.chefName} className="w-full max-w-[380px] mx-auto aspect-[3/4] object-cover" />
+          </FadeIn>
+          <FadeIn delay={0.15} className="md:w-3/5">
+            <p className="font-[family-name:var(--font-cormorant)] text-xs tracking-[0.25em] text-[#8b7355] mb-4 uppercase">{d.chefRole}</p>
+            <h2 className="text-3xl md:text-4xl tracking-widest mb-2 font-light">{d.chefName}</h2>
+            <p className="font-[family-name:var(--font-cormorant)] text-sm tracking-[0.15em] text-[#aaa] mb-8 uppercase">{d.chefNameEn}</p>
+            <p className="text-sm leading-[2.4] tracking-wide text-[#666] whitespace-pre-line mb-8">{d.chefBio}</p>
+            <img src="https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/sign.png" alt="Signature" className="h-10 opacity-50 mix-blend-multiply" />
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* ─── TAJIMI DETAIL PAGE (from reference URL) ─── */}
+      <section id="tajimi" className="py-28">
+        <div className="max-w-6xl mx-auto px-6 md:px-10">
+          <FadeIn className="text-center mb-16">
+            <h2 className="font-[family-name:var(--font-cormorant)] text-4xl md:text-6xl tracking-[0.2em] mb-2">{d.tajimiPageTitle}</h2>
+            <p className="text-sm tracking-[0.15em] text-[#8b7355]">{d.tajimiPageSub}</p>
+          </FadeIn>
+
+          {/* Hero image */}
+          <FadeIn className="mb-12">
+            <img src="https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/images/shop/tajimi_hero.jpg" alt="Tajimi Shop" className="w-full aspect-[16/7] object-cover" />
+          </FadeIn>
+
+          {/* Text block */}
+          <FadeIn className="max-w-3xl mx-auto text-center mb-16">
+            <p className="text-base md:text-lg leading-[2] tracking-wide mb-8 font-medium">{d.tajimiLead}</p>
+            <p className="text-sm leading-[2.2] tracking-wide text-[#666] whitespace-pre-line mb-4">{d.tajimiDescEn}</p>
+            <p className="text-sm leading-[2.2] tracking-wide text-[#666] whitespace-pre-line">{d.tajimiDescJa}</p>
+          </FadeIn>
+
+          {/* 3 gallery images */}
+          <FadeIn className="grid grid-cols-3 gap-3 md:gap-6 mb-16">
+            <img src="https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/images/shop/tajimi_01.jpg" alt="Tajimi" className="w-full aspect-[4/3] object-cover" />
+            <img src="https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/images/shop/tajimi_02.jpg" alt="Tajimi" className="w-full aspect-[4/3] object-cover" />
+            <img src="https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/images/shop/tajimi_03.jpg" alt="Tajimi" className="w-full aspect-[4/3] object-cover" />
+          </FadeIn>
+
+          {/* Information table */}
+          <FadeIn className="max-w-2xl mx-auto bg-white border border-[#e8e5de] p-8 md:p-12 mb-16">
+            <h3 className="font-[family-name:var(--font-cormorant)] text-xl tracking-[0.2em] text-center mb-2">{d.infoTitle}</h3>
+            <p className="text-[10px] tracking-[0.15em] text-[#8b7355] text-center mb-8">{d.infoSub}</p>
+            <table className="w-full text-sm">
+              <tbody>
+                {[
+                  [d.labels.tel, d.tajimi.tel],
+                  [d.labels.email, d.tajimi.email, true],
+                  [d.labels.hours, d.tajimi.hours],
+                  [d.labels.holiday, d.tajimi.holiday],
+                  [d.labels.access, `${d.tajimi.address}\n${d.tajimi.directions}`],
+                  [d.labels.parking, d.tajimi.parking],
+                ].map(([label, value, isEmail], i) => (
+                  <tr key={i} className="border-b border-dotted border-[#ddd]">
+                    <th className="py-4 text-left font-normal text-[#999] w-28 align-top tracking-wider text-xs">{label}</th>
+                    <td className="py-4 tracking-wide whitespace-pre-line leading-[2]">
+                      {isEmail ? <a href={`mailto:${value}`} className="text-[#8b7355] hover:underline">{value}</a> : value}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </FadeIn>
+
+          {/* Google Map */}
+          <FadeIn>
+            <h3 className="font-[family-name:var(--font-cormorant)] text-xl tracking-[0.2em] text-center mb-2">{d.accessTitle}</h3>
+            <p className="text-[10px] tracking-[0.15em] text-[#8b7355] text-center mb-8">{d.accessSub}</p>
+            <div className="w-full h-[350px] md:h-[450px] bg-[#eee]">
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3254.771560339927!2d137.1120541!3d35.3364938!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60036af5e33116a3%3A0x58aabb7ff5046c30!2z44K344Kn44O744K344OQ44K_IOWkmuayu-imi-W6lw!5e0!3m2!1sja!2sjp!4v1759112634563!5m2!1sja!2sjp" width="100%" height="100%" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* ─── ONLINE SHOP BANNER ─── */}
+      <a href="https://shop-shibata.com/" target="_blank" rel="noopener noreferrer" className="block bg-[#1a1a1a] text-white text-center py-6 hover:bg-[#8b7355] transition-colors duration-500">
+        <span className="font-[family-name:var(--font-cormorant)] text-lg tracking-[0.3em] uppercase">{d.onlineShop}</span>
+        <span className="block text-[10px] tracking-[0.15em] text-white/60 mt-1">{d.onlineShopSub}</span>
+      </a>
+
+      {/* ─── ALL SHOPS CARDS ─── */}
+      <section id="shops" className="py-28 bg-[#f5f3ee]">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10">
+          <FadeIn className="text-center mb-16">
+            <h2 className="font-[family-name:var(--font-cormorant)] text-3xl tracking-[0.2em] uppercase mb-2">{d.nav.shops}</h2>
+          </FadeIn>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            {d.allShops.map((shop, i) => (
+              <FadeIn key={i} delay={i * 0.08} className="bg-white p-6 hover:shadow-lg transition-shadow duration-500 border border-transparent hover:border-[#8b7355]/20">
+                <h3 className="font-[family-name:var(--font-cormorant)] text-lg tracking-[0.15em] mb-1">{shop.en}</h3>
+                <p className="text-[10px] tracking-[0.1em] text-[#8b7355] mb-4">{shop.ja}</p>
+                {shop.info && <p className="text-[11px] leading-[2] tracking-wide text-[#777] whitespace-pre-line">{shop.info}</p>}
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── FOOTER ─── */}
+      <footer className="bg-[#1a1a1a] text-white/80 pt-16 pb-10 px-6 md:px-10">
+        <div className="max-w-[1200px] mx-auto">
+          <div className="flex flex-col md:flex-row gap-12 md:gap-20 mb-16">
+            <div className="md:w-1/4">
+              <p className="font-[family-name:var(--font-cormorant)] text-2xl tracking-[0.2em] uppercase text-white mb-2">Chez Shibata</p>
+              <p className="text-[10px] tracking-[0.1em] text-white/40">シェ・シバタ</p>
+            </div>
+            <div className="md:w-3/4 grid grid-cols-2 md:grid-cols-3 gap-8 text-[11px] tracking-[0.1em]">
+              <div>
+                <p className="text-white/40 mb-3 text-[10px] tracking-[0.15em]">{d.footerNav.products}</p>
+                <ul className="space-y-2">
+                  <li><a href="#" className="hover:text-[#8b7355] transition-colors">{d.footerNav.freshCakes}</a></li>
+                  <li><a href="#" className="hover:text-[#8b7355] transition-colors">{d.footerNav.butterCakes}</a></li>
+                  <li><a href="#" className="hover:text-[#8b7355] transition-colors">{d.footerNav.specialty}</a></li>
+                  <li><a href="#" className="hover:text-[#8b7355] transition-colors">{d.footerNav.chocolat}</a></li>
+                  <li><a href="#" className="hover:text-[#8b7355] transition-colors">{d.footerNav.wholeCakes}</a></li>
+                </ul>
+              </div>
+              <div>
+                <p className="text-white/40 mb-3 text-[10px] tracking-[0.15em]">{d.footerNav.shops}</p>
+                <ul className="space-y-2">
+                  {d.allShops.map((s, i) => <li key={i}><a href="#" className="hover:text-[#8b7355] transition-colors">{s.ja}</a></li>)}
+                </ul>
+              </div>
+              <div>
+                <ul className="space-y-2">
+                  <li><a href="#" className="hover:text-[#8b7355] transition-colors">{d.footerNav.chef}</a></li>
+                  <li><a href="#" className="hover:text-[#8b7355] transition-colors">{d.footerNav.company}</a></li>
+                  <li><a href="#" className="hover:text-[#8b7355] transition-colors">{d.footerNav.contact}</a></li>
+                  <li><a href="#" className="hover:text-[#8b7355] transition-colors">{d.footerNav.recruit}</a></li>
+                </ul>
+              </div>
             </div>
           </div>
-          
-          <div className="md:w-1/2">
-            <form className="space-y-12" onSubmit={e => e.preventDefault()}>
-              <div className="relative group">
-                <input type="text" placeholder={currentT.formName} className="w-full bg-transparent border-b border-white/20 pb-4 outline-none font-light placeholder:text-white/30 focus:border-[#c5a365] transition-colors peer" />
-              </div>
-              <div className="relative group">
-                <input type="email" placeholder={currentT.formEmail} className="w-full bg-transparent border-b border-white/20 pb-4 outline-none font-light placeholder:text-white/30 focus:border-[#c5a365] transition-colors" />
-              </div>
-              <div className="relative group">
-                <textarea placeholder={currentT.formMessage} rows={4} className="w-full bg-transparent border-b border-white/20 pb-4 outline-none font-light placeholder:text-white/30 focus:border-[#c5a365] transition-colors resize-none"></textarea>
-              </div>
-              <button className="w-full py-5 border border-white/20 hover:bg-white hover:text-black transition-colors duration-500 font-sans text-xs tracking-[0.2em] uppercase">
-                {currentT.formSubmit}
-              </button>
-            </form>
-          </div>
-        </div>
-      </section>
 
-      {/* Footer */}
-      <footer className="py-12 px-6 md:px-20 flex flex-col md:flex-row justify-between items-center bg-[#111] text-white/50 text-xs tracking-widest font-sans font-light border-t border-white/10">
-        <div className="font-[family-name:var(--font-cormorant)] text-xl tracking-[0.2em] text-white mb-6 md:mb-0">
-          C.S
-        </div>
-        <div className="flex gap-8">
-          <a href="#" className="hover:text-white transition-colors">Instagram</a>
-          <a href="#" className="hover:text-white transition-colors">Line</a>
-        </div>
-        <div className="mt-6 md:mt-0">
-          &copy; {new Date().getFullYear()} Chez Shibata.
+          {/* Social + Copyright */}
+          <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="flex gap-6">
+              <a href="https://line.me/R/ti/p/%40wnh0533o" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-[#8b7355] transition-colors text-[11px] tracking-[0.15em]">LINE</a>
+              <a href="https://www.instagram.com/chezshibata/" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-[#8b7355] transition-colors text-[11px] tracking-[0.15em]">Instagram</a>
+            </div>
+            <p className="text-white/30 text-[10px] tracking-[0.15em]">&copy; {new Date().getFullYear()} Chez Shibata. All rights reserved.</p>
+          </div>
         </div>
       </footer>
     </div>

@@ -66,7 +66,7 @@ const dict = {
     chefRole: "Founder Executive Chef",
     chefName: "Takeshi Shibata",
     chefNameEn: "TAKESHI SHIBATA",
-    chefBio: ""I used to cook dishes and bake sweets with my mother, and I dreamed of becoming a professional chef ever since I was young."\nOpened Chez Shibata in 1995. Currently, he spends half of each month creating confectioneries and training staff members both in Japan and overseas. He is also broadly active both domestically and internationally as a business consultant as well as giving demonstrations and making television appearances.\nHe is a pâtissier who combines the Japanese samurai spirit with global sensibilities.",
+    chefBio: "\"I used to cook dishes and bake sweets with my mother, and I dreamed of becoming a professional chef ever since I was young.\"\nOpened Chez Shibata in 1995. Currently, he spends half of each month creating confectioneries and training staff members both in Japan and overseas. He is also broadly active both domestically and internationally as a business consultant as well as giving demonstrations and making television appearances.\nHe is a pâtissier who combines the Japanese samurai spirit with global sensibilities.",
     tajimiPageTitle: "TAJIMI BRANCH",
     tajimiPageSub: "Chez Shibata Tajimi",
     tajimiLead: "We provide customers with a range of Shibata original sweets based on French confectionery culture and production methods, from traditional confectioneries to innovative sweets.",

@@ -348,43 +348,55 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── SEASONAL CAKES (Replaced Butter Cakes) ─── */}
-      <section className="py-28 bg-[#1a1a1a] relative overflow-hidden pl-6 md:pl-10">
-        <div className="absolute top-1/2 -translate-y-1/2 right-0 md:-right-10 text-[15rem] md:text-[25rem] font-[family-name:var(--font-cormorant)] text-white/[0.02] font-bold pointer-events-none leading-none select-none">02</div>
-        
-        <FadeIn className="max-w-[1400px] mx-auto relative z-10">
-          <div className="flex justify-between items-end mb-10 pr-6 md:pr-10">
-            <div>
-              <h2 className="font-[family-name:var(--font-cormorant)] text-4xl md:text-5xl tracking-[0.15em] mb-4 text-white uppercase">Seasonal Cakes</h2>
-              <p className="text-sm tracking-wide text-[#888] max-w-lg leading-relaxed">{d.freshDesc}</p>
-            </div>
-            <a href="https://chez-shibata.com/cakes-cat/fresh-cakes/" className="hidden md:flex items-center gap-4 text-xs tracking-[0.2em] text-[#f5f0eb] hover:text-[#8b7355] transition-colors group">
-              <span>{d.lineup}</span>
-              <div className="w-12 h-px bg-[#f5f0eb] group-hover:bg-[#8b7355] transition-colors relative after:content-[''] after:absolute after:right-0 after:-top-[3px] after:w-2 after:h-[1px] after:bg-inherit after:rotate-45 before:content-[''] before:absolute before:right-0 before:-bottom-[3px] before:w-2 before:h-[1px] before:bg-inherit before:-rotate-45"></div>
-            </a>
-          </div>
+      {/* ─── SEASONAL CAKES ─── */}
+      <section className="py-28 bg-[#1a1a1a] relative">
+        <div className="absolute top-1/2 -translate-y-1/2 right-0 text-[15rem] md:text-[25rem] font-[family-name:var(--font-cormorant)] text-white/[0.02] font-bold pointer-events-none leading-none select-none overflow-hidden">02</div>
 
-          <div className="flex overflow-x-auto gap-6 snap-x snap-mandatory pb-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-            {seasonalCakes.map((cake, i) => (
-              <div key={i} className="snap-start shrink-0 w-[280px] md:w-[320px] group cursor-pointer">
-                <div className="aspect-[4/3] overflow-hidden bg-[#111] mb-6 relative">
-                  <img src={cake.img} alt={cake.ja} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                </div>
-                <h3 className="font-[family-name:var(--font-cormorant)] text-lg tracking-[0.1em] text-[#eee] mb-2">{cake.name}</h3>
-                <p className="text-[11px] tracking-wide text-[#8b7355] mb-4">{cake.ja}</p>
-                <p className="text-[11px] leading-relaxed text-[#888]">{cake.desc}</p>
-              </div>
-            ))}
+        {/* Header */}
+        <FadeIn className="px-6 md:px-10 mb-10 flex justify-between items-end max-w-[1400px] mx-auto relative z-10">
+          <div>
+            <h2 className="font-[family-name:var(--font-cormorant)] text-4xl md:text-5xl tracking-[0.15em] mb-4 text-white uppercase">Seasonal Cakes</h2>
+            <p className="text-sm tracking-wide text-[#888] max-w-lg leading-relaxed">{d.freshDesc}</p>
           </div>
-          
-          {/* Mobile lineup link */}
+          <a href="https://chez-shibata.com/cakes-cat/fresh-cakes/" target="_blank" rel="noopener noreferrer" className="hidden md:flex items-center gap-3 text-xs tracking-[0.2em] text-[#f5f0eb] hover:text-[#8b7355] transition-colors shrink-0">
+            <span>{d.lineup}</span>
+            <span className="text-lg">→</span>
+          </a>
+        </FadeIn>
+
+        {/* Scrollable row — full width, NOT constrained */}
+        <div
+          className="flex gap-5 overflow-x-auto pl-6 md:pl-10 pr-6 pb-6 relative z-10"
+          style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch", msOverflowStyle: "none", scrollbarWidth: "none" } as React.CSSProperties}
+        >
+          {seasonalCakes.map((cake, i) => (
+            <div
+              key={i}
+              className="group cursor-pointer shrink-0"
+              style={{ scrollSnapAlign: "start", width: "clamp(240px, 28vw, 340px)" }}
+            >
+              <div className="overflow-hidden bg-[#111] mb-5" style={{ aspectRatio: "4/3" }}>
+                <img
+                  src={cake.img}
+                  alt={cake.ja}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  loading="lazy"
+                />
+              </div>
+              <h3 className="font-[family-name:var(--font-cormorant)] text-lg tracking-[0.08em] text-[#eee] mb-1 leading-snug">{cake.name}</h3>
+              <p className="text-[10px] tracking-widest text-[#8b7355] mb-3 uppercase">{cake.ja}</p>
+              <p className="text-[11px] leading-relaxed text-[#777] line-clamp-3">{cake.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Mobile lineup link */}
           <div className="md:hidden mt-4 pr-6">
             <a href="https://chez-shibata.com/cakes-cat/fresh-cakes/" className="inline-flex items-center gap-4 text-xs tracking-[0.2em] text-[#f5f0eb] hover:text-[#8b7355] transition-colors group">
               <span>{d.lineup}</span>
               <div className="w-8 h-px bg-[#f5f0eb] group-hover:bg-[#8b7355] transition-colors relative after:content-[''] after:absolute after:right-0 after:-top-[3px] after:w-2 after:h-[1px] after:bg-inherit after:rotate-45 before:content-[''] before:absolute before:right-0 before:-bottom-[3px] before:w-2 before:h-[1px] before:bg-inherit before:-rotate-45"></div>
             </a>
           </div>
-        </FadeIn>
       </section>
 
       {/* ─── CHEF ─── */}

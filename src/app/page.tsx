@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 /* ───────────────────────────────────────────
@@ -207,6 +207,34 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
 
+  // Slider drag-to-scroll
+  const sliderRef = useRef<HTMLDivElement>(null);
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
+
+  const onMouseDown = (e: React.MouseEvent) => {
+    isDragging.current = true;
+    startX.current = e.pageX - (sliderRef.current?.offsetLeft ?? 0);
+    scrollLeft.current = sliderRef.current?.scrollLeft ?? 0;
+    if (sliderRef.current) sliderRef.current.style.cursor = "grabbing";
+  };
+  const onMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging.current || !sliderRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - sliderRef.current.offsetLeft;
+    const walk = (x - startX.current) * 1.5;
+    sliderRef.current.scrollLeft = scrollLeft.current - walk;
+  };
+  const onMouseUp = () => {
+    isDragging.current = false;
+    if (sliderRef.current) sliderRef.current.style.cursor = "grab";
+  };
+  const scrollSlider = (dir: "left" | "right") => {
+    if (!sliderRef.current) return;
+    sliderRef.current.scrollBy({ left: dir === "right" ? 360 : -360, behavior: "smooth" });
+  };
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -329,16 +357,15 @@ export default function Home() {
           </FadeIn>
 
           {/* Cake cards with names + descriptions */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 mb-16">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20 mb-20">
             {cakes.map((cake, i) => (
-              <FadeIn key={i} delay={i * 0.05} className="group relative overflow-hidden aspect-[4/5] bg-[#1a1a1a] cursor-pointer">
-                <img src={cake.img} alt={cake.ja} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1.5s] ease-out" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-700" />
-                <div className="absolute inset-x-0 bottom-0 p-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                  <p className="font-[family-name:var(--font-cormorant)] text-sm md:text-base tracking-[0.1em] text-white mb-1">{cake.name}</p>
-                  <p className="text-[10px] tracking-wide text-[#8b7355] mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">{cake.ja}</p>
-                  {lang === "ja" && <p className="text-[10px] leading-relaxed text-[#bbb] hidden md:block opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-150">{cake.desc}</p>}
+              <FadeIn key={i} delay={(i % 3) * 0.1} className="group cursor-pointer flex flex-col items-center text-center">
+                <div className="w-full aspect-[4/3] overflow-hidden bg-[#1a1a1a] mb-8">
+                  <img src={cake.img} alt={cake.ja} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1.5s] ease-out opacity-90 group-hover:opacity-100" loading="lazy" />
                 </div>
+                <h3 className="font-[family-name:var(--font-cormorant)] text-xl tracking-[0.15em] text-[#eee] mb-2 uppercase">{cake.name}</h3>
+                <p className="text-[11px] tracking-[0.2em] text-[#8b7355] mb-5">{cake.ja}</p>
+                {lang === "ja" && <p className="text-xs leading-relaxed text-[#777] max-w-sm mx-auto">{cake.desc}</p>}
               </FadeIn>
             ))}
           </div>
@@ -372,15 +399,16 @@ export default function Home() {
           {seasonalCakes.map((cake, i) => (
             <div
               key={i}
-              className="group cursor-pointer shrink-0"
+              className="group shrink-0 select-none"
               style={{ scrollSnapAlign: "start", width: "clamp(240px, 28vw, 340px)" }}
             >
-              <div className="overflow-hidden bg-[#111] mb-5" style={{ aspectRatio: "4/3" }}>
+              <div className="overflow-hidden bg-[#111] mb-5 pointer-events-none" style={{ aspectRatio: "4/3" }}>
                 <img
                   src={cake.img}
                   alt={cake.ja}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   loading="lazy"
+                  draggable="false"
                 />
               </div>
               <h3 className="font-[family-name:var(--font-cormorant)] text-lg tracking-[0.08em] text-[#eee] mb-1 leading-snug">{cake.name}</h3>
@@ -390,13 +418,28 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Mobile lineup link */}
-          <div className="md:hidden mt-4 pr-6">
-            <a href="https://chez-shibata.com/cakes-cat/fresh-cakes/" className="inline-flex items-center gap-4 text-xs tracking-[0.2em] text-[#f5f0eb] hover:text-[#8b7355] transition-colors group">
-              <span>{d.lineup}</span>
-              <div className="w-8 h-px bg-[#f5f0eb] group-hover:bg-[#8b7355] transition-colors relative after:content-[''] after:absolute after:right-0 after:-top-[3px] after:w-2 after:h-[1px] after:bg-inherit after:rotate-45 before:content-[''] before:absolute before:right-0 before:-bottom-[3px] before:w-2 before:h-[1px] before:bg-inherit before:-rotate-45"></div>
-            </a>
+        {/* Arrow navigation + mobile link */}
+        <div className="px-6 md:px-10 mt-8 flex items-center justify-between max-w-[1400px] mx-auto">
+          <a href="https://chez-shibata.com/cakes-cat/fresh-cakes/" target="_blank" rel="noopener noreferrer" className="md:hidden inline-flex items-center gap-3 text-xs tracking-[0.2em] text-[#f5f0eb] hover:text-[#8b7355] transition-colors">
+            <span>{d.lineup}</span><span>→</span>
+          </a>
+          <div className="flex gap-3 ml-auto">
+            <button
+              onClick={() => scrollSlider("left")}
+              className="w-12 h-12 border border-[#444] flex items-center justify-center text-[#aaa] hover:border-[#8b7355] hover:text-[#8b7355] transition-colors"
+              aria-label="Previous"
+            >
+              ←
+            </button>
+            <button
+              onClick={() => scrollSlider("right")}
+              className="w-12 h-12 border border-[#444] flex items-center justify-center text-[#aaa] hover:border-[#8b7355] hover:text-[#8b7355] transition-colors"
+              aria-label="Next"
+            >
+              →
+            </button>
           </div>
+        </div>
       </section>
 
       {/* ─── CHEF ─── */}

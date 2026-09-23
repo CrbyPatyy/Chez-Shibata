@@ -150,34 +150,34 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#ede8df] text-[#1a1a1a] font-[family-name:var(--font-noto-serif-jp)] selection:bg-[#8b7355]/30">
+    <div className="min-h-screen bg-[#1a1a1a] text-[#f5f0eb] font-[family-name:var(--font-noto-serif-jp)] selection:bg-[#8b7355]/30">
 
       {/* ─── HEADER ─── */}
-      <header className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? "bg-white/95 backdrop-blur-lg shadow-[0_1px_0_rgba(0,0,0,0.06)]" : "bg-transparent"}`}>
+      <header className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? "bg-[#1a1a1a]/95 backdrop-blur-lg shadow-[0_1px_0_rgba(255,255,255,0.06)]" : "bg-transparent"}`}>
         <div className="max-w-[1400px] mx-auto px-6 md:px-10 h-20 flex items-center justify-between">
           <a href="#" className="flex flex-col leading-tight">
-            <span className={`font-[family-name:var(--font-cormorant)] text-lg tracking-[0.25em] uppercase transition-colors ${scrolled ? "text-[#1a1a1a]" : "text-white"}`}>Chez Shibata</span>
-            <span className={`text-[9px] tracking-[0.15em] transition-colors ${scrolled ? "text-[#999]" : "text-white/60"}`}>シェ・シバタ</span>
+            <span className={`font-[family-name:var(--font-cormorant)] text-lg tracking-[0.25em] uppercase transition-colors ${scrolled ? "text-white" : "text-white"}`}>Chez Shibata</span>
+            <span className={`text-[9px] tracking-[0.15em] transition-colors ${scrolled ? "text-white/50" : "text-white/60"}`}>シェ・シバタ</span>
           </a>
 
           <div className="flex items-center gap-6">
             <nav className="hidden xl:flex gap-7 text-[11px] tracking-[0.15em]">
               {Object.entries(d.nav).slice(1, 6).map(([key, val]) => (
-                <a key={key} href={key === "online" ? "https://shop-shibata.com/" : `#${key}`} target={key === "online" ? "_blank" : undefined} className={`hover:text-[#8b7355] transition-colors ${scrolled ? "text-[#555]" : "text-white/90"}`}>{val}</a>
+                <a key={key} href={key === "online" ? "https://shop-shibata.com/" : `#${key}`} target={key === "online" ? "_blank" : undefined} className={`hover:text-[#8b7355] transition-colors ${scrolled ? "text-white/80" : "text-white/90"}`}>{val}</a>
               ))}
             </nav>
 
             {/* Language Pill */}
-            <div className={`relative flex rounded-full p-[3px] border transition-colors ${scrolled ? "border-[#ddd] bg-[#f5f5f3]" : "border-white/20 bg-white/10 backdrop-blur-md"}`}>
-              <div className={`absolute top-[3px] bottom-[3px] w-[calc(50%-3px)] rounded-full transition-all duration-300 ${lang === "en" ? "translate-x-full" : "translate-x-0"} ${scrolled ? "bg-white shadow-sm" : "bg-white/30"}`} />
-              <button onClick={() => setLang("ja")} className={`relative z-10 w-10 py-1 text-[9px] tracking-[0.15em] font-medium transition-colors ${lang === "ja" ? (scrolled ? "text-[#1a1a1a]" : "text-white") : (scrolled ? "text-[#aaa]" : "text-white/50")}`}>JA</button>
-              <button onClick={() => setLang("en")} className={`relative z-10 w-10 py-1 text-[9px] tracking-[0.15em] font-medium transition-colors ${lang === "en" ? (scrolled ? "text-[#1a1a1a]" : "text-white") : (scrolled ? "text-[#aaa]" : "text-white/50")}`}>EN</button>
+            <div className={`relative flex rounded-full p-[3px] border transition-colors ${scrolled ? "border-white/20 bg-white/10" : "border-white/20 bg-white/10 backdrop-blur-md"}`}>
+              <div className={`absolute top-[3px] bottom-[3px] w-[calc(50%-3px)] rounded-full transition-all duration-300 ${lang === "en" ? "translate-x-full" : "translate-x-0"} ${scrolled ? "bg-white/20" : "bg-white/30"}`} />
+              <button onClick={() => setLang("ja")} className={`relative z-10 w-10 py-1 text-[9px] tracking-[0.15em] font-medium transition-colors ${lang === "ja" ? "text-white" : "text-white/50"}`}>JA</button>
+              <button onClick={() => setLang("en")} className={`relative z-10 w-10 py-1 text-[9px] tracking-[0.15em] font-medium transition-colors ${lang === "en" ? "text-white" : "text-white/50"}`}>EN</button>
             </div>
 
             {/* Mobile hamburger */}
             <button onClick={() => setMenuOpen(!menuOpen)} className="xl:hidden flex flex-col gap-[5px] p-2">
-              <span className={`block w-5 h-px transition-all ${scrolled ? "bg-[#1a1a1a]" : "bg-white"} ${menuOpen ? "rotate-45 translate-y-[3px]" : ""}`} />
-              <span className={`block w-5 h-px transition-all ${scrolled ? "bg-[#1a1a1a]" : "bg-white"} ${menuOpen ? "-rotate-45 -translate-y-[3px]" : ""}`} />
+              <span className={`block w-5 h-px transition-all bg-white ${menuOpen ? "rotate-45 translate-y-[3px]" : ""}`} />
+              <span className={`block w-5 h-px transition-all bg-white ${menuOpen ? "-rotate-45 -translate-y-[3px]" : ""}`} />
             </button>
           </div>
         </div>
@@ -186,7 +186,7 @@ export default function Home() {
       {/* ─── MOBILE MENU ─── */}
       <AnimatePresence>
         {menuOpen && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-40 bg-[#FAFAF7] flex flex-col items-center justify-center gap-8">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-40 bg-[#1a1a1a] flex flex-col items-center justify-center gap-8">
             {Object.entries(d.nav).map(([key, val]) => (
               <a key={key} href={`#${key}`} onClick={() => setMenuOpen(false)} className="text-xl tracking-widest hover:text-[#8b7355] transition-colors">{val}</a>
             ))}
@@ -216,12 +216,12 @@ export default function Home() {
       <section className="py-28 px-6 max-w-3xl mx-auto text-center">
         <FadeIn>
           <div className="w-px h-14 bg-[#8b7355] mx-auto mb-10" />
-          <p className="text-base md:text-lg leading-[2.4] tracking-wide text-[#555] whitespace-pre-line">{d.intro}</p>
+          <p className="text-base md:text-lg leading-[2.4] tracking-wide text-[#bbb] whitespace-pre-line">{d.intro}</p>
         </FadeIn>
       </section>
 
       {/* ─── FRESH CAKES ─── */}
-      <section id="products" className="py-24 bg-white">
+      <section id="products" className="py-24 bg-[#111]">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10">
           <FadeIn className="text-center mb-16">
             <h2 className="font-[family-name:var(--font-cormorant)] text-4xl md:text-5xl tracking-[0.15em] mb-4">WHOLE CAKES</h2>
@@ -232,17 +232,17 @@ export default function Home() {
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 mb-10">
             {cakes.map((cake, i) => (
               <FadeIn key={i} delay={i * 0.08} className="group">
-                <div className="aspect-square overflow-hidden bg-[#f5f5f0] mb-4">
+                <div className="aspect-square overflow-hidden bg-[#1a1a1a] mb-4">
                   <img src={cake.img} alt={cake.ja} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                 </div>
-                <p className="font-[family-name:var(--font-cormorant)] text-xs tracking-[0.1em] text-[#555] mb-1">{cake.name}</p>
+                <p className="font-[family-name:var(--font-cormorant)] text-xs tracking-[0.1em] text-[#ccc] mb-1">{cake.name}</p>
                 <p className="text-[10px] tracking-wide text-[#8b7355] mb-2">{cake.ja}</p>
-                {lang === "ja" && <p className="text-[10px] leading-relaxed text-[#999] hidden md:block">{cake.desc}</p>}
+                {lang === "ja" && <p className="text-[10px] leading-relaxed text-[#888] hidden md:block">{cake.desc}</p>}
               </FadeIn>
             ))}
           </div>
           <FadeIn className="text-center">
-            <a href="https://chez-shibata.com/cakes-cat/fresh-cakes/" className="inline-block text-xs tracking-[0.2em] border-b border-[#1a1a1a] pb-1 hover:text-[#8b7355] hover:border-[#8b7355] transition-colors">{d.lineup}</a>
+            <a href="https://chez-shibata.com/cakes-cat/fresh-cakes/" className="inline-block text-xs tracking-[0.2em] border-b border-[#f5f0eb] pb-1 hover:text-[#8b7355] hover:border-[#8b7355] transition-colors">{d.lineup}</a>
           </FadeIn>
         </div>
       </section>
@@ -253,7 +253,7 @@ export default function Home() {
           <div className="md:w-1/2">
             <h2 className="font-[family-name:var(--font-cormorant)] text-4xl md:text-5xl tracking-[0.15em] mb-6">{d.butterTitle}</h2>
             <p className="text-sm tracking-wide text-[#888] leading-relaxed mb-8 max-w-md">{d.butterDesc}</p>
-            <a href="https://chez-shibata.com/cakes-cat/butter-cakes/" className="inline-block text-xs tracking-[0.2em] border-b border-[#1a1a1a] pb-1 hover:text-[#8b7355] hover:border-[#8b7355] transition-colors">{d.lineup}</a>
+            <a href="https://chez-shibata.com/cakes-cat/butter-cakes/" className="inline-block text-xs tracking-[0.2em] border-b border-[#f5f0eb] pb-1 hover:text-[#8b7355] hover:border-[#8b7355] transition-colors">{d.lineup}</a>
           </div>
           <div className="md:w-1/2 overflow-hidden">
             <img src="https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/butter-cakes-img-pc.jpg" alt="Butter Cakes" className="w-full object-cover hover:scale-105 transition-transform duration-[2s]" />
@@ -262,7 +262,7 @@ export default function Home() {
       </section>
 
       {/* ─── CHEF ─── */}
-      <section id="chef" className="py-28 bg-[#e5ded3]">
+      <section id="chef" className="py-28 bg-[#0a0a0a]">
         <div className="max-w-6xl mx-auto px-6 md:px-10 flex flex-col md:flex-row gap-16 items-center">
           <FadeIn className="md:w-2/5">
             <img src="https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/chef-sp.jpg" alt={d.chefName} className="w-full max-w-[380px] mx-auto aspect-[3/4] object-cover" />
@@ -270,9 +270,9 @@ export default function Home() {
           <FadeIn delay={0.15} className="md:w-3/5">
             <p className="font-[family-name:var(--font-cormorant)] text-xs tracking-[0.25em] text-[#8b7355] mb-4 uppercase">{d.chefRole}</p>
             <h2 className="text-3xl md:text-4xl tracking-widest mb-2 font-light">{d.chefName}</h2>
-            <p className="font-[family-name:var(--font-cormorant)] text-sm tracking-[0.15em] text-[#aaa] mb-8 uppercase">{d.chefNameEn}</p>
-            <p className="text-sm leading-[2.4] tracking-wide text-[#666] whitespace-pre-line mb-8">{d.chefBio}</p>
-            <img src="https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/sign.png" alt="Signature" className="h-10 opacity-50 mix-blend-multiply" />
+            <p className="font-[family-name:var(--font-cormorant)] text-sm tracking-[0.15em] text-[#888] mb-8 uppercase">{d.chefNameEn}</p>
+            <p className="text-sm leading-[2.4] tracking-wide text-[#bbb] whitespace-pre-line mb-8">{d.chefBio}</p>
+            <img src="https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/sign.png" alt="Signature" className="h-10 invert opacity-80" />
           </FadeIn>
         </div>
       </section>
@@ -291,7 +291,7 @@ export default function Home() {
           </FadeIn>
 
           {/* Information table */}
-          <FadeIn className="max-w-2xl mx-auto bg-white border border-[#e8e5de] p-8 md:p-12 mb-16">
+          <FadeIn className="max-w-2xl mx-auto bg-[#111] border border-[#333] p-8 md:p-12 mb-16">
             <h3 className="font-[family-name:var(--font-cormorant)] text-xl tracking-[0.2em] text-center mb-2">{d.infoTitle}</h3>
             <p className="text-[10px] tracking-[0.15em] text-[#8b7355] text-center mb-8">{d.infoSub}</p>
             <table className="w-full text-sm">
@@ -304,8 +304,8 @@ export default function Home() {
                   [d.labels.access, `${d.tajimi.address}\n${d.tajimi.directions}`],
                   [d.labels.parking, d.tajimi.parking],
                 ].map(([label, value, isEmail], i) => (
-                  <tr key={i} className="border-b border-dotted border-[#ddd]">
-                    <th className="py-4 text-left font-normal text-[#999] w-28 align-top tracking-wider text-xs">{label}</th>
+                  <tr key={i} className="border-b border-dotted border-[#333]">
+                    <th className="py-4 text-left font-normal text-[#888] w-28 align-top tracking-wider text-xs">{label}</th>
                     <td className="py-4 tracking-wide whitespace-pre-line leading-[2]">
                       {isEmail ? <a href={`mailto:${value}`} className="text-[#8b7355] hover:underline">{value}</a> : value}
                     </td>
@@ -327,23 +327,23 @@ export default function Home() {
       </section>
 
       {/* ─── ONLINE SHOP BANNER ─── */}
-      <a href="https://shop-shibata.com/" target="_blank" rel="noopener noreferrer" className="block bg-[#1a1a1a] text-white text-center py-6 hover:bg-[#8b7355] transition-colors duration-500">
-        <span className="font-[family-name:var(--font-cormorant)] text-lg tracking-[0.3em] uppercase">{d.onlineShop}</span>
-        <span className="block text-[10px] tracking-[0.15em] text-white/60 mt-1">{d.onlineShopSub}</span>
+      <a href="https://shop-shibata.com/" target="_blank" rel="noopener noreferrer" className="block bg-[#8b7355] text-white text-center py-8 hover:bg-[#a68c6a] transition-colors duration-500">
+        <span className="font-[family-name:var(--font-cormorant)] text-xl tracking-[0.3em] uppercase">{d.onlineShop}</span>
+        <span className="block text-xs tracking-[0.15em] text-white/80 mt-2">{d.onlineShopSub}</span>
       </a>
 
       {/* ─── ALL SHOPS CARDS ─── */}
-      <section id="shops" className="py-28 bg-[#e5ded3]">
+      <section id="shops" className="py-28 bg-[#0a0a0a]">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10">
           <FadeIn className="text-center mb-16">
             <h2 className="font-[family-name:var(--font-cormorant)] text-3xl tracking-[0.2em] uppercase mb-2">{d.nav.shops}</h2>
           </FadeIn>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
             {d.allShops.map((shop, i) => (
-              <FadeIn key={i} delay={i * 0.08} className="bg-white p-6 hover:shadow-lg transition-shadow duration-500 border border-transparent hover:border-[#8b7355]/20">
-                <h3 className="font-[family-name:var(--font-cormorant)] text-lg tracking-[0.15em] mb-1">{shop.en}</h3>
+              <FadeIn key={i} delay={i * 0.08} className="bg-[#111] p-6 hover:shadow-lg transition-shadow duration-500 border border-[#222] hover:border-[#8b7355]/50">
+                <h3 className="font-[family-name:var(--font-cormorant)] text-lg tracking-[0.15em] mb-1 text-[#f5f0eb]">{shop.en}</h3>
                 <p className="text-[10px] tracking-[0.1em] text-[#8b7355] mb-4">{shop.ja}</p>
-                {shop.info && <p className="text-[11px] leading-[2] tracking-wide text-[#777] whitespace-pre-line">{shop.info}</p>}
+                {shop.info && <p className="text-[11px] leading-[2] tracking-wide text-[#aaa] whitespace-pre-line">{shop.info}</p>}
               </FadeIn>
             ))}
           </div>
@@ -351,17 +351,17 @@ export default function Home() {
       </section>
 
       {/* ─── CONTACT ─── */}
-      <section id="contact" className="py-28 bg-white border-t border-[#f5f5f0]">
+      <section id="contact" className="py-28 bg-[#1a1a1a] border-t border-[#333]">
         <div className="max-w-4xl mx-auto px-6 md:px-10 flex flex-col md:flex-row gap-16">
           <FadeIn className="md:w-1/2">
             <h2 className="font-[family-name:var(--font-cormorant)] text-3xl md:text-5xl tracking-[0.15em] mb-4">CONTACT</h2>
             <p className="text-[10px] tracking-[0.1em] text-[#8b7355] mb-8">{lang === "ja" ? "お問い合わせ" : "Contact Us"}</p>
-            <p className="text-sm tracking-wide text-[#888] leading-relaxed mb-8">
+            <p className="text-sm tracking-wide text-[#bbb] leading-relaxed mb-8">
               {lang === "ja" 
                 ? "商品に関するご質問やご意見など、お気軽にお問い合わせください。" 
                 : "Please feel free to contact us with any questions or feedback regarding our products."}
             </p>
-            <div className="text-xs tracking-wider text-[#555] space-y-2">
+            <div className="text-xs tracking-wider text-[#aaa] space-y-2">
               <p>E-mail: shop@chez-shibata.com</p>
               <p>TEL: +81 (0) 572-24-3030</p>
             </div>
@@ -372,21 +372,21 @@ export default function Home() {
               <input 
                 type="text" 
                 placeholder={lang === "ja" ? "お名前" : "Name"} 
-                className="w-full border-b border-[#ddd] pb-3 bg-transparent outline-none text-sm placeholder:text-[#aaa] focus:border-[#8b7355] transition-colors"
+                className="w-full border-b border-[#444] pb-3 bg-transparent outline-none text-[#eee] text-sm placeholder:text-[#888] focus:border-[#8b7355] transition-colors"
               />
               <input 
                 type="email" 
                 placeholder={lang === "ja" ? "メールアドレス" : "Email"} 
-                className="w-full border-b border-[#ddd] pb-3 bg-transparent outline-none text-sm placeholder:text-[#aaa] focus:border-[#8b7355] transition-colors"
+                className="w-full border-b border-[#444] pb-3 bg-transparent outline-none text-[#eee] text-sm placeholder:text-[#888] focus:border-[#8b7355] transition-colors"
               />
               <textarea 
                 placeholder={lang === "ja" ? "メッセージ" : "Message"} 
                 rows={4}
-                className="w-full border-b border-[#ddd] pb-3 bg-transparent outline-none text-sm placeholder:text-[#aaa] focus:border-[#8b7355] transition-colors resize-none"
+                className="w-full border-b border-[#444] pb-3 bg-transparent outline-none text-[#eee] text-sm placeholder:text-[#888] focus:border-[#8b7355] transition-colors resize-none"
               ></textarea>
               <button 
                 type="submit" 
-                className="self-start mt-4 px-10 py-3 bg-[#1a1a1a] text-white text-[10px] tracking-[0.2em] uppercase hover:bg-[#8b7355] transition-colors duration-300"
+                className="self-start mt-4 px-10 py-3 bg-white text-[#1a1a1a] text-[10px] tracking-[0.2em] uppercase hover:bg-[#8b7355] hover:text-white transition-colors duration-300"
               >
                 {lang === "ja" ? "送信する" : "Send Message"}
               </button>

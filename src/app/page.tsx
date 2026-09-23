@@ -369,7 +369,7 @@ export default function Home() {
         {/* Framer Motion Draggable Carousel */}
         <div className="pl-6 md:pl-10 relative z-10 overflow-hidden" ref={sliderRef}>
           <motion.div 
-            className="flex gap-8 md:gap-16 cursor-grab active:cursor-grabbing pb-12 w-max pr-10"
+            className="flex gap-8 md:gap-16 cursor-grab active:cursor-grabbing pb-12 w-max pr-10 touch-pan-y"
             drag="x"
             dragConstraints={sliderRef}
             dragElastic={0.1}

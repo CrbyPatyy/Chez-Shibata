@@ -197,8 +197,10 @@ export default function Home() {
       {/* ─── HERO SLIDESHOW ─── */}
       <section className="relative h-screen min-h-[650px] overflow-hidden bg-black">
         {heroImages.map((src, i) => (
-          <div key={i} className={`absolute inset-0 transition-opacity duration-[1.5s] ease-in-out ${i === activeSlide ? "opacity-100" : "opacity-0"}`}>
-            <img src={src} alt="Chez Shibata" className="w-full h-full object-cover" />
+          <div key={i} className={`absolute inset-0 transition-opacity duration-[2s] ease-in-out ${i === activeSlide ? "opacity-100 z-10" : "opacity-0 z-0"}`}>
+            <div className={`w-full h-full transform transition-transform duration-[10s] ease-out ${i === activeSlide ? "scale-105" : "scale-100"}`}>
+              <img src={src} alt="Chez Shibata" className="w-full h-full object-cover" />
+            </div>
           </div>
         ))}
         <div className="absolute inset-0 bg-black/30 z-10" />
@@ -206,38 +208,61 @@ export default function Home() {
           <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.3 }} className="font-[family-name:var(--font-cormorant)] text-5xl md:text-7xl lg:text-8xl font-light tracking-[0.2em] uppercase mb-6">
             Chez Shibata
           </motion.h1>
-          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1, duration: 1 }} className="text-[11px] md:text-xs tracking-[0.4em] text-white/70 font-[family-name:var(--font-cormorant)]">
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1, duration: 1 }} className="text-[11px] md:text-xs tracking-[0.4em] text-white/70 font-[family-name:var(--font-cormorant)] mb-20">
             {d.heroSub}
           </motion.p>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5, duration: 1 }} className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
+            <span className="text-[8px] tracking-[0.3em] text-white/50 uppercase">Scroll</span>
+            <div className="w-[1px] h-12 bg-white/20 relative overflow-hidden">
+              <motion.div animate={{ y: [0, 48] }} transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }} className="w-full h-1/2 bg-white/80 absolute top-0" />
+            </div>
+          </motion.div>
         </div>
       </section>
 
       {/* ─── INTRO ─── */}
-      <section className="py-28 px-6 max-w-3xl mx-auto text-center">
+      <section className="pt-28 pb-20 px-6 max-w-3xl mx-auto text-center">
         <FadeIn>
           <div className="w-px h-14 bg-[#8b7355] mx-auto mb-10" />
           <p className="text-base md:text-lg leading-[2.4] tracking-wide text-[#bbb] whitespace-pre-line">{d.intro}</p>
         </FadeIn>
       </section>
 
+      {/* ─── INFINITE MARQUEE ─── */}
+      <div className="w-full overflow-hidden whitespace-nowrap bg-[#1a1a1a] py-8 border-y border-[#333]/50 relative z-10 flex items-center">
+        <motion.div 
+          animate={{ x: [0, -1035] }} 
+          transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
+          className="flex font-[family-name:var(--font-cormorant)] text-4xl md:text-6xl tracking-[0.2em] text-[#333] uppercase"
+        >
+          <span className="mr-8">PÂTISSERIE &bull; CHOCOLATIER &bull; SALON DE THÉ &bull;</span>
+          <span className="mr-8">PÂTISSERIE &bull; CHOCOLATIER &bull; SALON DE THÉ &bull;</span>
+          <span className="mr-8">PÂTISSERIE &bull; CHOCOLATIER &bull; SALON DE THÉ &bull;</span>
+          <span className="mr-8">PÂTISSERIE &bull; CHOCOLATIER &bull; SALON DE THÉ &bull;</span>
+        </motion.div>
+      </div>
+
       {/* ─── FRESH CAKES ─── */}
-      <section id="products" className="py-24 bg-[#111]">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10">
+      <section id="products" className="py-24 bg-[#111] relative overflow-hidden">
+        {/* Decorative number */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 text-[15rem] md:text-[20rem] font-[family-name:var(--font-cormorant)] text-white/[0.02] font-bold pointer-events-none leading-none select-none">01</div>
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10 relative z-10">
           <FadeIn className="text-center mb-16">
-            <h2 className="font-[family-name:var(--font-cormorant)] text-4xl md:text-5xl tracking-[0.15em] mb-4">WHOLE CAKES</h2>
+            <h2 className="font-[family-name:var(--font-cormorant)] text-4xl md:text-5xl tracking-[0.15em] mb-4 text-white">WHOLE CAKES</h2>
             <p className="text-sm tracking-wide text-[#888] max-w-lg mx-auto leading-relaxed">{d.freshDesc}</p>
           </FadeIn>
 
           {/* Cake cards with names + descriptions */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 mb-10">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 mb-16">
             {cakes.map((cake, i) => (
-              <FadeIn key={i} delay={i * 0.08} className="group">
-                <div className="aspect-square overflow-hidden bg-[#1a1a1a] mb-4">
-                  <img src={cake.img} alt={cake.ja} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+              <FadeIn key={i} delay={i * 0.05} className="group relative overflow-hidden aspect-[4/5] bg-[#1a1a1a] cursor-pointer">
+                <img src={cake.img} alt={cake.ja} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1.5s] ease-out" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-700" />
+                <div className="absolute inset-x-0 bottom-0 p-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                  <p className="font-[family-name:var(--font-cormorant)] text-sm md:text-base tracking-[0.1em] text-white mb-1">{cake.name}</p>
+                  <p className="text-[10px] tracking-wide text-[#8b7355] mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">{cake.ja}</p>
+                  {lang === "ja" && <p className="text-[10px] leading-relaxed text-[#bbb] hidden md:block opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-150">{cake.desc}</p>}
                 </div>
-                <p className="font-[family-name:var(--font-cormorant)] text-xs tracking-[0.1em] text-[#ccc] mb-1">{cake.name}</p>
-                <p className="text-[10px] tracking-wide text-[#8b7355] mb-2">{cake.ja}</p>
-                {lang === "ja" && <p className="text-[10px] leading-relaxed text-[#888] hidden md:block">{cake.desc}</p>}
               </FadeIn>
             ))}
           </div>
@@ -248,8 +273,9 @@ export default function Home() {
       </section>
 
       {/* ─── BUTTER CAKES ─── */}
-      <section className="relative">
-        <FadeIn className="max-w-[1400px] mx-auto px-6 md:px-10 py-24 flex flex-col md:flex-row items-center gap-16">
+      <section className="relative overflow-hidden">
+        <div className="absolute top-1/2 -translate-y-1/2 right-0 md:-right-10 text-[15rem] md:text-[25rem] font-[family-name:var(--font-cormorant)] text-white/[0.02] font-bold pointer-events-none leading-none select-none">02</div>
+        <FadeIn className="max-w-[1400px] mx-auto px-6 md:px-10 py-24 flex flex-col md:flex-row items-center gap-16 relative z-10">
           <div className="md:w-1/2">
             <h2 className="font-[family-name:var(--font-cormorant)] text-4xl md:text-5xl tracking-[0.15em] mb-6">{d.butterTitle}</h2>
             <p className="text-sm tracking-wide text-[#888] leading-relaxed mb-8 max-w-md">{d.butterDesc}</p>
@@ -262,8 +288,9 @@ export default function Home() {
       </section>
 
       {/* ─── CHEF ─── */}
-      <section id="chef" className="py-28 bg-[#0a0a0a]">
-        <div className="max-w-6xl mx-auto px-6 md:px-10 flex flex-col md:flex-row gap-16 items-center">
+      <section id="chef" className="py-28 bg-[#0a0a0a] relative overflow-hidden">
+        <div className="absolute top-0 left-0 md:-left-10 text-[15rem] md:text-[25rem] font-[family-name:var(--font-cormorant)] text-white/[0.02] font-bold pointer-events-none leading-none select-none">03</div>
+        <div className="max-w-6xl mx-auto px-6 md:px-10 flex flex-col md:flex-row gap-16 items-center relative z-10">
           <FadeIn className="md:w-2/5">
             <img src="https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/chef-sp.jpg" alt={d.chefName} className="w-full max-w-[380px] mx-auto aspect-[3/4] object-cover" />
           </FadeIn>

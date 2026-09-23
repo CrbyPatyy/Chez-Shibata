@@ -421,7 +421,7 @@ export default function Home() {
             <h2 className="text-3xl md:text-4xl tracking-widest mb-2 font-light">{d.chefName}</h2>
             <p className="font-[family-name:var(--font-cormorant)] text-sm tracking-[0.15em] text-[#888] mb-8 uppercase">{d.chefNameEn}</p>
             <p className="text-sm leading-[2.4] tracking-wide text-[#bbb] whitespace-pre-line mb-8">{d.chefBio}</p>
-             <div className="chef-socials mt-4 flex gap-4">
+            <div className="flex justify-start mt-4">
   <a
     href="https://www.instagram.com/chezshibata/"
     target="_blank"
@@ -430,6 +430,7 @@ export default function Home() {
     <img src="/icons/instagram.svg" alt="Instagram" className="w-8 h-8" />
   </a>
 </div>
+
 
 <img
   src="https://chez-shibata.com/wp-content/themes/chez-shibata-2021/img/sign.png"

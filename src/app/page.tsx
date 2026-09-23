@@ -393,7 +393,12 @@ export default function Home() {
 
         {/* Scrollable row — full width, NOT constrained */}
         <div
-          className="flex gap-5 overflow-x-auto pl-6 md:pl-10 pr-6 pb-6 relative z-10"
+          ref={sliderRef}
+          onMouseDown={onMouseDown}
+          onMouseMove={onMouseMove}
+          onMouseUp={onMouseUp}
+          onMouseLeave={onMouseUp}
+          className="flex gap-5 overflow-x-auto pl-6 md:pl-10 pr-6 pb-6 relative z-10 cursor-grab active:cursor-grabbing"
           style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch", msOverflowStyle: "none", scrollbarWidth: "none" } as React.CSSProperties}
         >
           {seasonalCakes.map((cake, i) => (
@@ -411,34 +416,18 @@ export default function Home() {
                   draggable="false"
                 />
               </div>
-              <h3 className="font-[family-name:var(--font-cormorant)] text-lg tracking-[0.08em] text-[#eee] mb-1 leading-snug">{cake.name}</h3>
-              <p className="text-[10px] tracking-widest text-[#8b7355] mb-3 uppercase">{cake.ja}</p>
-              <p className="text-[11px] leading-relaxed text-[#777] line-clamp-3">{cake.desc}</p>
+              <h3 className="font-[family-name:var(--font-cormorant)] text-lg tracking-[0.08em] text-[#eee] mb-1 leading-snug pointer-events-none">{cake.name}</h3>
+              <p className="text-[10px] tracking-widest text-[#8b7355] mb-3 uppercase pointer-events-none">{cake.ja}</p>
+              <p className="text-[11px] leading-relaxed text-[#777] line-clamp-3 pointer-events-none">{cake.desc}</p>
             </div>
           ))}
         </div>
 
-        {/* Arrow navigation + mobile link */}
+        {/* Mobile link */}
         <div className="px-6 md:px-10 mt-8 flex items-center justify-between max-w-[1400px] mx-auto">
           <a href="https://chez-shibata.com/cakes-cat/fresh-cakes/" target="_blank" rel="noopener noreferrer" className="md:hidden inline-flex items-center gap-3 text-xs tracking-[0.2em] text-[#f5f0eb] hover:text-[#8b7355] transition-colors">
             <span>{d.lineup}</span><span>→</span>
           </a>
-          <div className="flex gap-3 ml-auto">
-            <button
-              onClick={() => scrollSlider("left")}
-              className="w-12 h-12 border border-[#444] flex items-center justify-center text-[#aaa] hover:border-[#8b7355] hover:text-[#8b7355] transition-colors"
-              aria-label="Previous"
-            >
-              ←
-            </button>
-            <button
-              onClick={() => scrollSlider("right")}
-              className="w-12 h-12 border border-[#444] flex items-center justify-center text-[#aaa] hover:border-[#8b7355] hover:text-[#8b7355] transition-colors"
-              aria-label="Next"
-            >
-              →
-            </button>
-          </div>
         </div>
       </section>
 

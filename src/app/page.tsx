@@ -118,14 +118,80 @@ const cakes = [
   { img: "https://en.chez-shibata.com/wp/wp-content/uploads/2018/04/DSC_3247-400x280.jpg", name: "MI CUIT FROMAGE", ja: "ミキュイフロマージュ", desc: "Lavishly made using French cream cheese and accented with homemade raspberry jam" },
 ];
 
-/* ─── Cake data — Seasonal Cakes (Original Fresh Cakes) ─── */
+/* ─── Cake data — Seasonal Cakes (scraped from chez-shibata.com/cakes-cat/fresh-cakes/) ─── */
 const seasonalCakes = [
-  { img: "https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/fresh-cakes-thumb-6.jpg", name: "PÉCHE D'AMOUR", ja: "ペッシュダムール", desc: "２種類の桃を使用し、レアチーズ、アーモンド生地などでリッチに仕上げた季節限定のお菓子。" },
-  { img: "https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/fresh-cakes-thumb-7.jpg", name: "TARTE AUX FIGUES", ja: "タルト オ フィグ", desc: "自慢のタルト生地に愛知県産イチジクをのせた人気のタルト。" },
-  { img: "https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/fresh-cakes-thumb-8.jpg", name: "MANGOSTIC", ja: "マンゴスティック", desc: "マンゴーのコンポートとマンゴープリン、ライムのクリーム、数種のナッツのプラリネ。" },
-  { img: "https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/fresh-cakes-thumb-9.jpg", name: "L'ULTIME CHOCOLAT", ja: "ルティム ショコラ", desc: "コートジボワール産のカカオからできたナッティーなチョコレートムースにバニラのクレームブリュレと自家製のプラリネを忍ばせました。" },
-  { img: "https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/fresh-cakes-thumb-1.jpg", name: "GOURMANDISE", ja: "グルマンディーズ", desc: "国産いちごとキルシュのカスタードクリーム、北海道産生クリームをパイ生地とシュー生地でサンドにしました。" },
-  { img: "https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/fresh-cakes-thumb-5.jpg", name: "AGRUME YUZU.", ja: "アギューム ユズ", desc: "柚子とミルクチョコレートを使用し甘味と酸味が融合したお菓子。" },
+  {
+    img: "https://chez-shibata.com/wp/wp-content/uploads/2025/05/IMG_9751-400x280.jpg",
+    name: "Thai Milk Tea Cake",
+    ja: "タイミルクティーケーキ",
+    desc: "《名古屋店限定》シバタのバンコク店でも人気なタイミルクティーをケーキにアレンジ。香り高いタイの紅茶とセモア社のショコラを合わせた甘さをおさえアロマを味わうお菓子。",
+  },
+  {
+    img: "https://chez-shibata.com/wp/wp-content/uploads/2024/11/IMG_8029-400x280.jpg",
+    name: "Infiniment Vanille",
+    ja: "アンフィニモン　バニーユ",
+    desc: "《名古屋店限定》マダガスカル産のバニラを惜しみなく使用。バニラムース、バニラガナッシュ、バニラのバスク生地にイチゴの香りがアクセント。",
+  },
+  {
+    img: "https://chez-shibata.com/wp/wp-content/uploads/2024/10/IMG_7757-400x280.jpg",
+    name: "Forêt Rouge",
+    ja: "フォレルージュ",
+    desc: "ドイツのお菓子、ブラックフォレストを赤いフルーツを使用しオリジナル仕立て。ショコラとグリオットチェリーにキルシュを加えました。",
+  },
+  {
+    img: "https://chez-shibata.com/wp/wp-content/uploads/2023/05/IMG_3863-400x280.jpg",
+    name: "Opéra",
+    ja: "オペラ",
+    desc: "《名古屋店限定》メキシコ産ホワイトカカオを使用したムースにクレームブリュレのカフェと自家製コーヒーのプラリネを合わせた進化系オペラ。",
+  },
+  {
+    img: "https://chez-shibata.com/wp/wp-content/uploads/2023/05/IMG_3865-400x280.jpg",
+    name: "Chocolat Banane",
+    ja: "ショコラバナーヌ",
+    desc: "シェフが修行時代から作り続けているお菓子。ショコラとバナナの抜群な相性を新たなフォルムで完成度を上げました。",
+  },
+  {
+    img: "https://chez-shibata.com/wp/wp-content/uploads/2024/11/IMG_7916-400x280.jpg",
+    name: "Le Champignon",
+    ja: "ル　シャンピニオン",
+    desc: "アールグレイとキャラメルにアクセントでパッションの酸味をつけたキノコ型のお菓子。",
+  },
+  {
+    img: "https://chez-shibata.com/wp/wp-content/uploads/2022/07/cbabd95807257e7e5b6b2601863e522b-e1658022512598-400x280.jpg",
+    name: "Flan Fromage",
+    ja: "フランフロマージュ",
+    desc: "《名古屋店限定》クリームチーズを使用したフラン風チーズタルト。",
+  },
+  {
+    img: "https://chez-shibata.com/wp/wp-content/uploads/2020/11/5e94736b3270442c31fc52742fc02e24-400x280.jpeg",
+    name: "Gourmandise",
+    ja: "グルマンディーズ",
+    desc: "《名古屋店限定》国産いちごとキルシュのカスタードクリーム、北海道産生クリームをパイ生地とシュー生地でサンドにしました。",
+  },
+  {
+    img: "https://chez-shibata.com/wp/wp-content/uploads/2022/11/5e4c8ec0ae6cf00b5d5a5d19aa4a070f-400x280.png",
+    name: "Caprice Poire Caramel",
+    ja: "カプリス  ポワール  キャラメル",
+    desc: "香り豊かな洋梨を最大限に活かし、キャラメルの香ばしさで大人のテイストに仕上げました。芳醇な香りをお楽しみください。",
+  },
+  {
+    img: "https://chez-shibata.com/wp/wp-content/uploads/2016/11/casino_01-400x280.jpg",
+    name: "Casino",
+    ja: "カジノ",
+    desc: "《多治見店限定》マカオのカジノでインスピレーションを受けたサイコロ型のスイーツ。センターにはベリーのコンポートで酸味をプラス。",
+  },
+  {
+    img: "https://chez-shibata.com/wp/wp-content/uploads/2016/11/miranda_01-400x280.jpg",
+    name: "Miranda",
+    ja: "ミランダ",
+    desc: "《多治見店限定》イチゴとコンデンスミルクをトップにセンガセンガナのジュレとチーズのタルト。",
+  },
+  {
+    img: "https://chez-shibata.com/wp/wp-content/uploads/2019/06/2b99d76d972a8601d33a626063920e02-400x280.jpg",
+    name: "Duo Fromage",
+    ja: "デュオ フロマージュ",
+    desc: "《多治見店限定》レアチーズとベイクドチーズの２種類を組み合わせ、自家製ブルーベリーのコンフィチュールでアクセントをつけました。",
+  },
 ];
 
 const FadeIn = ({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) => (

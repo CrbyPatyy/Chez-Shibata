@@ -118,6 +118,16 @@ const cakes = [
   { img: "https://en.chez-shibata.com/wp/wp-content/uploads/2018/04/DSC_3247-400x280.jpg", name: "MI CUIT FROMAGE", ja: "ミキュイフロマージュ", desc: "Lavishly made using French cream cheese and accented with homemade raspberry jam" },
 ];
 
+/* ─── Cake data — Seasonal Cakes (Original Fresh Cakes) ─── */
+const seasonalCakes = [
+  { img: "https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/fresh-cakes-thumb-6.jpg", name: "PÉCHE D'AMOUR", ja: "ペッシュダムール", desc: "２種類の桃を使用し、レアチーズ、アーモンド生地などでリッチに仕上げた季節限定のお菓子。" },
+  { img: "https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/fresh-cakes-thumb-7.jpg", name: "TARTE AUX FIGUES", ja: "タルト オ フィグ", desc: "自慢のタルト生地に愛知県産イチジクをのせた人気のタルト。" },
+  { img: "https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/fresh-cakes-thumb-8.jpg", name: "MANGOSTIC", ja: "マンゴスティック", desc: "マンゴーのコンポートとマンゴープリン、ライムのクリーム、数種のナッツのプラリネ。" },
+  { img: "https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/fresh-cakes-thumb-9.jpg", name: "L'ULTIME CHOCOLAT", ja: "ルティム ショコラ", desc: "コートジボワール産のカカオからできたナッティーなチョコレートムースにバニラのクレームブリュレと自家製のプラリネを忍ばせました。" },
+  { img: "https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/fresh-cakes-thumb-1.jpg", name: "GOURMANDISE", ja: "グルマンディーズ", desc: "国産いちごとキルシュのカスタードクリーム、北海道産生クリームをパイ生地とシュー生地でサンドにしました。" },
+  { img: "https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/fresh-cakes-thumb-5.jpg", name: "AGRUME YUZU.", ja: "アギューム ユズ", desc: "柚子とミルクチョコレートを使用し甘味と酸味が融合したお菓子。" },
+];
+
 const FadeIn = ({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) => (
   <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-8%" }} transition={{ duration: 0.7, delay, ease: [0.25, 0.1, 0.25, 1] }} className={className}>
     {children}
@@ -272,17 +282,41 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── BUTTER CAKES ─── */}
-      <section className="relative overflow-hidden">
+      {/* ─── SEASONAL CAKES (Replaced Butter Cakes) ─── */}
+      <section className="py-28 bg-[#1a1a1a] relative overflow-hidden pl-6 md:pl-10">
         <div className="absolute top-1/2 -translate-y-1/2 right-0 md:-right-10 text-[15rem] md:text-[25rem] font-[family-name:var(--font-cormorant)] text-white/[0.02] font-bold pointer-events-none leading-none select-none">02</div>
-        <FadeIn className="max-w-[1400px] mx-auto px-6 md:px-10 py-24 flex flex-col md:flex-row items-center gap-16 relative z-10">
-          <div className="md:w-1/2">
-            <h2 className="font-[family-name:var(--font-cormorant)] text-4xl md:text-5xl tracking-[0.15em] mb-6">{d.butterTitle}</h2>
-            <p className="text-sm tracking-wide text-[#888] leading-relaxed mb-8 max-w-md">{d.butterDesc}</p>
-            <a href="https://chez-shibata.com/cakes-cat/butter-cakes/" className="inline-block text-xs tracking-[0.2em] border-b border-[#f5f0eb] pb-1 hover:text-[#8b7355] hover:border-[#8b7355] transition-colors">{d.lineup}</a>
+        
+        <FadeIn className="max-w-[1400px] mx-auto relative z-10">
+          <div className="flex justify-between items-end mb-10 pr-6 md:pr-10">
+            <div>
+              <h2 className="font-[family-name:var(--font-cormorant)] text-4xl md:text-5xl tracking-[0.15em] mb-4 text-white uppercase">Seasonal Cakes</h2>
+              <p className="text-sm tracking-wide text-[#888] max-w-lg leading-relaxed">{d.freshDesc}</p>
+            </div>
+            <a href="https://chez-shibata.com/cakes-cat/fresh-cakes/" className="hidden md:flex items-center gap-4 text-xs tracking-[0.2em] text-[#f5f0eb] hover:text-[#8b7355] transition-colors group">
+              <span>{d.lineup}</span>
+              <div className="w-12 h-px bg-[#f5f0eb] group-hover:bg-[#8b7355] transition-colors relative after:content-[''] after:absolute after:right-0 after:-top-[3px] after:w-2 after:h-[1px] after:bg-inherit after:rotate-45 before:content-[''] before:absolute before:right-0 before:-bottom-[3px] before:w-2 before:h-[1px] before:bg-inherit before:-rotate-45"></div>
+            </a>
           </div>
-          <div className="md:w-1/2 overflow-hidden">
-            <img src="https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/butter-cakes-img-pc.jpg" alt="Butter Cakes" className="w-full object-cover hover:scale-105 transition-transform duration-[2s]" />
+
+          <div className="flex overflow-x-auto gap-6 snap-x snap-mandatory pb-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            {seasonalCakes.map((cake, i) => (
+              <div key={i} className="snap-start shrink-0 w-[280px] md:w-[320px] group cursor-pointer">
+                <div className="aspect-[4/3] overflow-hidden bg-[#111] mb-6 relative">
+                  <img src={cake.img} alt={cake.ja} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                </div>
+                <h3 className="font-[family-name:var(--font-cormorant)] text-lg tracking-[0.1em] text-[#eee] mb-2">{cake.name}</h3>
+                <p className="text-[11px] tracking-wide text-[#8b7355] mb-4">{cake.ja}</p>
+                <p className="text-[11px] leading-relaxed text-[#888]">{cake.desc}</p>
+              </div>
+            ))}
+          </div>
+          
+          {/* Mobile lineup link */}
+          <div className="md:hidden mt-4 pr-6">
+            <a href="https://chez-shibata.com/cakes-cat/fresh-cakes/" className="inline-flex items-center gap-4 text-xs tracking-[0.2em] text-[#f5f0eb] hover:text-[#8b7355] transition-colors group">
+              <span>{d.lineup}</span>
+              <div className="w-8 h-px bg-[#f5f0eb] group-hover:bg-[#8b7355] transition-colors relative after:content-[''] after:absolute after:right-0 after:-top-[3px] after:w-2 after:h-[1px] after:bg-inherit after:rotate-45 before:content-[''] before:absolute before:right-0 before:-bottom-[3px] before:w-2 before:h-[1px] before:bg-inherit before:-rotate-45"></div>
+            </a>
           </div>
         </FadeIn>
       </section>

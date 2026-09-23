@@ -103,14 +103,19 @@ const dict = {
   }
 };
 
-/* ─── Cake data with JP names + descriptions ─── */
+/* ─── Cake data — Whole Cakes from en.chez-shibata.com ─── */
 const cakes = [
-  { img: "https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/fresh-cakes-thumb-6.jpg", name: "PÉCHE D'AMOUR", ja: "ペッシュダムール", desc: "２種類の桃を使用し、レアチーズ、アーモンド生地などでリッチに仕上げた季節限定のお菓子。" },
-  { img: "https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/fresh-cakes-thumb-7.jpg", name: "TARTE AUX FIGUES", ja: "タルト オ フィグ", desc: "自慢のタルト生地に愛知県産イチジクをのせた人気のタルト。" },
-  { img: "https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/fresh-cakes-thumb-8.jpg", name: "MANGOSTIC", ja: "マンゴスティック", desc: "マンゴーのコンポートとマンゴープリン、ライムのクリーム、数種のナッツのプラリネ。" },
-  { img: "https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/fresh-cakes-thumb-9.jpg", name: "L'ULTIME CHOCOLAT", ja: "ルティム ショコラ", desc: "コートジボワール産のカカオからできたナッティーなチョコレートムースにバニラのクレームブリュレと自家製のプラリネを忍ばせました。" },
-  { img: "https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/fresh-cakes-thumb-1.jpg", name: "GOURMANDISE", ja: "グルマンディーズ", desc: "国産いちごとキルシュのカスタードクリーム、北海道産生クリームをパイ生地とシュー生地でサンドにしました。" },
-  { img: "https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/fresh-cakes-thumb-5.jpg", name: "AGRUME YUZU.", ja: "アギューム ユズ", desc: "柚子とミルクチョコレートを使用し甘味と酸味が融合したお菓子。" },
+  { img: "https://en.chez-shibata.com/wp/wp-content/uploads/2020/03/wholeCake_chantillyFruits.jpg", name: "CHANTILLY FRUITS", ja: "シャンティフリュイ", desc: "Fresh decoration cake decorated with fruit" },
+  { img: "https://en.chez-shibata.com/wp/wp-content/uploads/2019/11/wholeCake_laChantilly.jpg", name: "LA CHANTILLY", ja: "ラ・シャンティ", desc: "Made using fresh cream, sponge cake, strawberries and other berries." },
+  { img: "https://en.chez-shibata.com/wp/wp-content/uploads/2019/11/wholeCake_tarteAuxFruits.jpg", name: "TARTE AUX FRUITS", ja: "タルト オ フリュイ", desc: "Fruit tart luxuriously topped with seasonal fruit" },
+  { img: "https://en.chez-shibata.com/wp/wp-content/uploads/2019/11/wholeCake_demilune.jpg", name: "DEMILUNE", ja: "ドゥミリュンヌ", desc: "Gorgeously decorated halfmoon-shaped fresh decoration cake" },
+  { img: "https://en.chez-shibata.com/wp/wp-content/uploads/2019/11/wholeCake_gateauAuChocolat-1.jpg", name: "GÂTEAU AU CHOCOLAT", ja: "ガトーショコラ", desc: "Chocolate cake baked using two varieties of the highest-quality chocolate" },
+  { img: "https://en.chez-shibata.com/wp/wp-content/uploads/2019/11/wholeCake_fromageCru.jpg", name: "FROMAGE CRU", ja: "フロマージュクリュ", desc: "Unbaked cheesecake containing raspberry jam and milk chocolate cream" },
+  { img: "https://en.chez-shibata.com/wp/wp-content/uploads/2019/11/wholeCake_saintMarc.jpg", name: "SAINT MARC", ja: "サンマルク", desc: "Traditional French confectionery featuring vanilla and chocolate cream layered between caramelized almond sponge cake" },
+  { img: "https://en.chez-shibata.com/wp/wp-content/uploads/2019/11/wholeCake_tarteAuFromage.jpg", name: "TARTE AU FROMAGE", ja: "タルト オ フロマージュ", desc: "Cheese tart made using French cream cheese" },
+  { img: "https://en.chez-shibata.com/wp/wp-content/uploads/2019/11/wholeCake_tarteAuChocolat.jpg", name: "TARTE AU CHOCOLAT", ja: "タルト オ ショコラ", desc: "Chocolate tart that melts in your mouth" },
+  { img: "https://en.chez-shibata.com/wp/wp-content/uploads/2020/03/burnt-cheese-cake.jpg", name: "BURNT CHEESE CAKE", ja: "バスクチーズケーキ", desc: "Original cheesecake based on Basque cheesecakes from San Sebastian, Spain" },
+  { img: "https://en.chez-shibata.com/wp/wp-content/uploads/2018/04/DSC_3247-400x280.jpg", name: "MI CUIT FROMAGE", ja: "ミキュイフロマージュ", desc: "Lavishly made using French cream cheese and accented with homemade raspberry jam" },
 ];
 
 const FadeIn = ({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) => (
@@ -145,7 +150,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAFAF7] text-[#1a1a1a] font-[family-name:var(--font-noto-serif-jp)] selection:bg-[#8b7355]/30">
+    <div className="min-h-screen bg-[#ede8df] text-[#1a1a1a] font-[family-name:var(--font-noto-serif-jp)] selection:bg-[#8b7355]/30">
 
       {/* ─── HEADER ─── */}
       <header className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? "bg-white/95 backdrop-blur-lg shadow-[0_1px_0_rgba(0,0,0,0.06)]" : "bg-transparent"}`}>
@@ -219,12 +224,12 @@ export default function Home() {
       <section id="products" className="py-24 bg-white">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10">
           <FadeIn className="text-center mb-16">
-            <h2 className="font-[family-name:var(--font-cormorant)] text-4xl md:text-5xl tracking-[0.15em] mb-4">{d.freshTitle}</h2>
+            <h2 className="font-[family-name:var(--font-cormorant)] text-4xl md:text-5xl tracking-[0.15em] mb-4">WHOLE CAKES</h2>
             <p className="text-sm tracking-wide text-[#888] max-w-lg mx-auto leading-relaxed">{d.freshDesc}</p>
           </FadeIn>
 
           {/* Cake cards with names + descriptions */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-10">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 mb-10">
             {cakes.map((cake, i) => (
               <FadeIn key={i} delay={i * 0.08} className="group">
                 <div className="aspect-square overflow-hidden bg-[#f5f5f0] mb-4">
@@ -257,7 +262,7 @@ export default function Home() {
       </section>
 
       {/* ─── CHEF ─── */}
-      <section id="chef" className="py-28 bg-[#f5f3ee]">
+      <section id="chef" className="py-28 bg-[#e5ded3]">
         <div className="max-w-6xl mx-auto px-6 md:px-10 flex flex-col md:flex-row gap-16 items-center">
           <FadeIn className="md:w-2/5">
             <img src="https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/img/chef-sp.jpg" alt={d.chefName} className="w-full max-w-[380px] mx-auto aspect-[3/4] object-cover" />
@@ -283,20 +288,6 @@ export default function Home() {
           {/* Hero image */}
           <FadeIn className="mb-12">
             <img src="https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/images/shop/tajimi_hero.jpg" alt="Tajimi Shop" className="w-full aspect-[16/7] object-cover" />
-          </FadeIn>
-
-          {/* Text block */}
-          <FadeIn className="max-w-3xl mx-auto text-center mb-16">
-            <p className="text-base md:text-lg leading-[2] tracking-wide mb-8 font-medium">{d.tajimiLead}</p>
-            <p className="text-sm leading-[2.2] tracking-wide text-[#666] whitespace-pre-line mb-4">{d.tajimiDescEn}</p>
-            <p className="text-sm leading-[2.2] tracking-wide text-[#666] whitespace-pre-line">{d.tajimiDescJa}</p>
-          </FadeIn>
-
-          {/* 3 gallery images */}
-          <FadeIn className="grid grid-cols-3 gap-3 md:gap-6 mb-16">
-            <img src="https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/images/shop/tajimi_01.jpg" alt="Tajimi" className="w-full aspect-[4/3] object-cover" />
-            <img src="https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/images/shop/tajimi_02.jpg" alt="Tajimi" className="w-full aspect-[4/3] object-cover" />
-            <img src="https://chez-shibata.com/wp/wp-content/themes/chez-shibata-2021/images/shop/tajimi_03.jpg" alt="Tajimi" className="w-full aspect-[4/3] object-cover" />
           </FadeIn>
 
           {/* Information table */}
@@ -342,7 +333,7 @@ export default function Home() {
       </a>
 
       {/* ─── ALL SHOPS CARDS ─── */}
-      <section id="shops" className="py-28 bg-[#f5f3ee]">
+      <section id="shops" className="py-28 bg-[#e5ded3]">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10">
           <FadeIn className="text-center mb-16">
             <h2 className="font-[family-name:var(--font-cormorant)] text-3xl tracking-[0.2em] uppercase mb-2">{d.nav.shops}</h2>

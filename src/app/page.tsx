@@ -206,34 +206,7 @@ export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
-
-  // Slider drag-to-scroll
   const sliderRef = useRef<HTMLDivElement>(null);
-  const isDragging = useRef(false);
-  const startX = useRef(0);
-  const scrollLeft = useRef(0);
-
-  const onMouseDown = (e: React.MouseEvent) => {
-    isDragging.current = true;
-    startX.current = e.pageX - (sliderRef.current?.offsetLeft ?? 0);
-    scrollLeft.current = sliderRef.current?.scrollLeft ?? 0;
-    if (sliderRef.current) sliderRef.current.style.cursor = "grabbing";
-  };
-  const onMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging.current || !sliderRef.current) return;
-    e.preventDefault();
-    const x = e.pageX - sliderRef.current.offsetLeft;
-    const walk = (x - startX.current) * 1.5;
-    sliderRef.current.scrollLeft = scrollLeft.current - walk;
-  };
-  const onMouseUp = () => {
-    isDragging.current = false;
-    if (sliderRef.current) sliderRef.current.style.cursor = "grab";
-  };
-  const scrollSlider = (dir: "left" | "right") => {
-    if (!sliderRef.current) return;
-    sliderRef.current.scrollBy({ left: dir === "right" ? 360 : -360, behavior: "smooth" });
-  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -375,59 +348,64 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── SEASONAL CAKES ─── */}
-      <section className="py-28 bg-[#1a1a1a] relative">
-        <div className="absolute top-1/2 -translate-y-1/2 right-0 text-[15rem] md:text-[25rem] font-[family-name:var(--font-cormorant)] text-white/[0.02] font-bold pointer-events-none leading-none select-none overflow-hidden">02</div>
+      {/* ─── SEASONAL CAKES (Modern Framer Motion Showcase) ─── */}
+      <section className="py-32 bg-black relative overflow-hidden">
+        {/* Massive Background Typography */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15vw] whitespace-nowrap font-[family-name:var(--font-cormorant)] text-white/[0.03] font-bold pointer-events-none select-none tracking-widest">
+          SEASONAL
+        </div>
 
-        {/* Header */}
-        <FadeIn className="px-6 md:px-10 mb-10 flex justify-between items-end max-w-[1400px] mx-auto relative z-10">
+        <FadeIn className="px-6 md:px-10 mb-16 max-w-[1600px] mx-auto relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div>
-            <h2 className="font-[family-name:var(--font-cormorant)] text-4xl md:text-5xl tracking-[0.15em] mb-4 text-white uppercase">Seasonal Cakes</h2>
-            <p className="text-sm tracking-wide text-[#888] max-w-lg leading-relaxed">{d.freshDesc}</p>
+            <h2 className="font-[family-name:var(--font-cormorant)] text-5xl md:text-7xl tracking-[0.1em] mb-4 text-white uppercase">Seasonal Cakes</h2>
+            <p className="text-sm tracking-widest text-[#888] max-w-lg leading-relaxed">{d.freshDesc}</p>
           </div>
-          <a href="https://chez-shibata.com/cakes-cat/fresh-cakes/" target="_blank" rel="noopener noreferrer" className="hidden md:flex items-center gap-3 text-xs tracking-[0.2em] text-[#f5f0eb] hover:text-[#8b7355] transition-colors shrink-0">
-            <span>{d.lineup}</span>
-            <span className="text-lg">→</span>
+          <a href="https://chez-shibata.com/cakes-cat/fresh-cakes/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-4 text-xs tracking-[0.2em] text-[#f5f0eb] hover:text-[#8b7355] transition-colors shrink-0 group">
+            <span className="uppercase">{d.lineup}</span>
+            <div className="w-12 h-px bg-[#f5f0eb] group-hover:bg-[#8b7355] transition-colors relative after:content-[''] after:absolute after:right-0 after:-top-[3px] after:w-2 after:h-[1px] after:bg-inherit after:rotate-45 before:content-[''] before:absolute before:right-0 before:-bottom-[3px] before:w-2 before:h-[1px] before:bg-inherit before:-rotate-45"></div>
           </a>
         </FadeIn>
 
-        {/* Scrollable row — full width, NOT constrained */}
-        <div
-          ref={sliderRef}
-          onMouseDown={onMouseDown}
-          onMouseMove={onMouseMove}
-          onMouseUp={onMouseUp}
-          onMouseLeave={onMouseUp}
-          className="flex gap-5 overflow-x-auto pl-6 md:pl-10 pr-6 pb-6 relative z-10 cursor-grab active:cursor-grabbing"
-          style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch", msOverflowStyle: "none", scrollbarWidth: "none" } as React.CSSProperties}
-        >
-          {seasonalCakes.map((cake, i) => (
-            <div
-              key={i}
-              className="group shrink-0 select-none"
-              style={{ scrollSnapAlign: "start", width: "clamp(240px, 28vw, 340px)" }}
-            >
-              <div className="overflow-hidden bg-[#111] mb-5 pointer-events-none" style={{ aspectRatio: "4/3" }}>
-                <img
-                  src={cake.img}
-                  alt={cake.ja}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  loading="lazy"
-                  draggable="false"
-                />
-              </div>
-              <h3 className="font-[family-name:var(--font-cormorant)] text-lg tracking-[0.08em] text-[#eee] mb-1 leading-snug pointer-events-none">{cake.name}</h3>
-              <p className="text-[10px] tracking-widest text-[#8b7355] mb-3 uppercase pointer-events-none">{cake.ja}</p>
-              <p className="text-[11px] leading-relaxed text-[#777] line-clamp-3 pointer-events-none">{cake.desc}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Mobile link */}
-        <div className="px-6 md:px-10 mt-8 flex items-center justify-between max-w-[1400px] mx-auto">
-          <a href="https://chez-shibata.com/cakes-cat/fresh-cakes/" target="_blank" rel="noopener noreferrer" className="md:hidden inline-flex items-center gap-3 text-xs tracking-[0.2em] text-[#f5f0eb] hover:text-[#8b7355] transition-colors">
-            <span>{d.lineup}</span><span>→</span>
-          </a>
+        {/* Framer Motion Draggable Carousel */}
+        <div className="pl-6 md:pl-10 relative z-10 overflow-hidden" ref={sliderRef}>
+          <motion.div 
+            className="flex gap-8 md:gap-16 cursor-grab active:cursor-grabbing pb-12 w-max pr-10"
+            drag="x"
+            dragConstraints={sliderRef}
+            dragElastic={0.1}
+            whileTap={{ cursor: "grabbing" }}
+          >
+            {seasonalCakes.map((cake, i) => (
+              <motion.div
+                key={i}
+                className="shrink-0 flex flex-col justify-center relative group"
+                style={{ width: "clamp(300px, 40vw, 500px)" }}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.8, delay: i * 0.05, ease: [0.25, 1, 0.5, 1] }}
+              >
+                {/* Image blending into pitch black background */}
+                <div className="w-full aspect-square relative mb-6 pointer-events-none flex items-center justify-center">
+                  <img
+                    src={cake.img}
+                    alt={cake.ja}
+                    className="w-[85%] h-[85%] object-contain filter drop-shadow-[0_20px_30px_rgba(0,0,0,0.8)] group-hover:scale-110 transition-transform duration-[1.5s] ease-out pointer-events-none"
+                    draggable="false"
+                  />
+                  {/* Subtle gradient vignette to blend edges perfectly into black */}
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_40%,_black_100%)] pointer-events-none"></div>
+                </div>
+                
+                {/* Typography underneath */}
+                <div className="text-center px-4 pointer-events-none mt-auto">
+                  <h3 className="font-[family-name:var(--font-cormorant)] text-2xl md:text-3xl tracking-[0.1em] text-white mb-3">{cake.name}</h3>
+                  <p className="text-[11px] tracking-[0.3em] text-[#8b7355] mb-5 uppercase">{cake.ja}</p>
+                  <p className="text-xs leading-[2.2] text-[#777] max-w-xs mx-auto">{cake.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
